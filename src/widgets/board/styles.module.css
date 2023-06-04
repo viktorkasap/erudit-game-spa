@@ -6,6 +6,7 @@
   background-color: var(--color18);
   border-radius: 6px;
   border: 4px solid var(--color18);
+  margin: 0 auto;
 }
 
 .row {
@@ -35,31 +36,31 @@
   font-family: sans-serif;
 }
 
-.cell--center {
+.cellCenter {
   background-color: var(--color19);
 }
 
 /* X WORDS */
-.cell-word-x3 {
+.cellWordX3 {
   background-color: var(--color4);
 }
 
-.cell-word-x2 {
+.cellWordX2 {
   background-color: var(--color5);
 }
 
 /* X LETTERS */
-.cell-letter-x2 {
-  background-color: var(--color6);
+.cellLetterX3 {
+  background-color: var(--color7);
 }
 
-.cell-letter-x3 {
-  background-color: var(--color7);
+.cellLetterX2 {
+  background-color: var(--color6);
 }
 /* Board  end*/
 
 /* Letters box start */
-.letters-box {
+.lettersBox {
   display: flex;
   padding: 1rem;
   justify-content: center;
@@ -69,7 +70,7 @@
   border-radius: 8px;
 }
 
-.letters-box-letter {
+.lettersBoxLetter {
   display: flex;
   justify-content: center;
   align-items: center;

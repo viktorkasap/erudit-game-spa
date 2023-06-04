@@ -1,0 +1,151 @@
+@import './fonts.css';
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --color-primary: #323439;
+  --color-secondary: #ffffff;
+  --color-accent: #7e69eb;
+  --color-success: #12b76a;
+  --color-danger: #ff2329;
+  --color-warning: #f6a60a;
+  --color-info: #228be6;
+  --color-dark: #222222;
+  --color-light: #f9fafb;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-mute: #8f95a2;
+}
+
+.dark:root {
+  --color-primary: #ffffff;
+  --color-secondary: #323439;
+  --color-accent: #7e69eb;
+  --color-success: #12b76a;
+  --color-danger: #ff2329;
+  --color-warning: #f6a60a;
+  --color-info: #228be6;
+  --color-dark: #222222;
+  --color-light: #f9fafb;
+  --color-black: #000000;
+  --color-white: #ffffff;
+  --color-mute: #8f95a2;
+}
+
+@layer base {
+  /* BASE */
+  * {
+    margin: 0;
+    padding: 0;
+    vertical-align: baseline;
+    box-sizing: border-box;
+    scrollbar-width: thin;
+    scrollbar-color: theme('colors.gray.500') theme('colors.white');
+  }
+
+  html {
+    height: 100%;
+    textsizeadjust: 100%;
+    -ms-textsizeadjust: 100%;
+    -webkit-textsizeadjust: 100%;
+    -moz-textsizeadjust: 100%;
+  }
+
+  body {
+    height: 100%;
+    -webkit-font-smoothing: antialiased;
+    overflow-y: scroll;
+    @apply bg-white dark:bg-dark text-dark dark:text-white;
+  }
+
+  img,
+  picture,
+  video,
+  canvas,
+  svg {
+    display: block;
+    max-width: 100%;
+  }
+
+  p,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    overflow-wrap: break-word;
+  }
+
+  h1 {
+    @apply text-h1;
+  }
+
+  h2 {
+    @apply text-h2;
+  }
+
+  h3 {
+    @apply text-h3;
+  }
+
+  h4 {
+    @apply text-h4;
+  }
+
+  h5 {
+    @apply text-h5;
+  }
+
+  h6 {
+    @apply text-h6;
+  }
+
+  td {
+    vertical-align: middle;
+  }
+
+  /* SCROLLBAR */
+  ::-webkit-scrollbar {
+    width: 0.5rem;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: var(--color-secondary);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--color-mute);
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: var(--color-dark);
+  }
+
+  /* INPUT */
+  input:-webkit-autofill,
+  input:-webkit-autofill:hover,
+  input:-webkit-autofill:focus,
+  input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px var(--color-light) inset !important;
+  }
+
+  input:-webkit-autofill:disabled {
+    -webkit-box-shadow: 0 0 0 30px var(--color-light) inset !important;
+  }
+
+  /* TEST */
+  /*
+    p {
+      padding: theme('spacing.4');
+      border: 2px solid theme('colors.purple.500');
+      color: theme('colors.green.200')
+    }
+   */
+
+  /*p {*/
+  /*  @apply text-red-500 dark:text-yellow-500;*/
+  /*}*/
+}

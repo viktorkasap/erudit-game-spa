@@ -1,32 +1,36 @@
 import cx from 'classnames';
 import { useStore } from 'effector-react';
 
-import './styles.css';
-
 import { log } from 'shared/lib';
 
 import { $board } from './model';
+import styles from './styles.module.css';
 
 // RULES https://ru.wikipedia.org/wiki/%D0%A1%D0%BA%D1%80%D1%8D%D0%B1%D0%B1%D0%BB
 
 export const Board = () => {
   const board = useStore($board);
 
-  log('board', board);
+  log(styles);
 
   return (
     <>
-      <div className="board">
+      <div className="grid grid-rows-layout3">
+        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, repellendus! 1234567890</p>
+        <code>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, numquam!</code>
+        <h1 className="text">Hello Title H1</h1>
+      </div>
+      <div className={styles.board}>
         {board.map((row, indexRow) => {
           return (
-            <div key={`${row}-${indexRow}`} className="row" data-row={indexRow}>
+            <div key={`${row}-${indexRow}`} className={styles.row} data-row={indexRow}>
               {row.map((cell: null | string | number, indexCell: number) => {
-                const className = cx('cell', {
-                  'cell-word-x3': isWordX3(indexRow, indexCell),
-                  'cell-word-x2': isWordX2(indexRow, indexCell),
-                  'cell-letter-x2': isLetterX2(indexRow, indexCell),
-                  'cell-letter-x3': isLetterX3(indexRow, indexCell),
-                  'cell--center': indexRow === 7 && indexCell === 7,
+                const className = cx(styles.cell, {
+                  [styles.cellWordX3]: isWordX3(indexRow, indexCell),
+                  [styles.cellWordX2]: isWordX2(indexRow, indexCell),
+                  [styles.cellLetterX3]: isLetterX3(indexRow, indexCell),
+                  [styles.cellLetterX2]: isLetterX2(indexRow, indexCell),
+                  [styles.cellCenter]: indexRow === 7 && indexCell === 7,
                 });
 
                 return (
@@ -40,14 +44,14 @@ export const Board = () => {
         })}
       </div>
 
-      <div className="letters-box">
-        <div className="letters-box-letter">a</div>
-        <div className="letters-box-letter">b</div>
-        <div className="letters-box-letter">c</div>
-        <div className="letters-box-letter">d</div>
-        <div className="letters-box-letter">e</div>
-        <div className="letters-box-letter">f</div>
-        <div className="letters-box-letter">g</div>
+      <div className={styles.lettersBox}>
+        <div className={styles.lettersBoxLetter}>a</div>
+        <div className={styles.lettersBoxLetter}>b</div>
+        <div className={styles.lettersBoxLetter}>c</div>
+        <div className={styles.lettersBoxLetter}>d</div>
+        <div className={styles.lettersBoxLetter}>e</div>
+        <div className={styles.lettersBoxLetter}>f</div>
+        <div className={styles.lettersBoxLetter}>g</div>
       </div>
     </>
   );

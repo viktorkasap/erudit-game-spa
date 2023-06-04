@@ -18,7 +18,7 @@ $board.watch((state) => {
   log('[board]', state);
 });
 
-//
+/*
 const letters = {
   А: {
     count: 10,
@@ -149,3 +149,4 @@ const letters = {
     point: 3,
   },
 };
+*/
