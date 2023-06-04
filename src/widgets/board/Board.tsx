@@ -1,36 +1,28 @@
-import cx from 'classnames';
 import { useStore } from 'effector-react';
 
-import { log } from 'shared/lib';
+import { createStyles } from '@mantine/core';
 
 import { $board } from './model';
-import styles from './styles.module.css';
 
 // RULES https://ru.wikipedia.org/wiki/%D0%A1%D0%BA%D1%80%D1%8D%D0%B1%D0%B1%D0%BB
 
 export const Board = () => {
   const board = useStore($board);
-
-  log(styles);
+  const { classes, cx } = useStyles();
 
   return (
     <>
-      <div className="grid grid-rows-layout3">
-        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Aperiam, repellendus! 1234567890</p>
-        <code>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Facilis, numquam!</code>
-        <h1 className="text">Hello Title H1</h1>
-      </div>
-      <div className={styles.board}>
+      <div className={cx(classes.board)}>
         {board.map((row, indexRow) => {
           return (
-            <div key={`${row}-${indexRow}`} className={styles.row} data-row={indexRow}>
+            <div key={`${row}-${indexRow}`} className={cx(classes.row)} data-row={indexRow}>
               {row.map((cell: null | string | number, indexCell: number) => {
-                const className = cx(styles.cell, {
-                  [styles.cellWordX3]: isWordX3(indexRow, indexCell),
-                  [styles.cellWordX2]: isWordX2(indexRow, indexCell),
-                  [styles.cellLetterX3]: isLetterX3(indexRow, indexCell),
-                  [styles.cellLetterX2]: isLetterX2(indexRow, indexCell),
-                  [styles.cellCenter]: indexRow === 7 && indexCell === 7,
+                const className = cx(classes.cell, {
+                  [classes.cellWordX3]: isWordX3(indexRow, indexCell),
+                  [classes.cellWordX2]: isWordX2(indexRow, indexCell),
+                  [classes.cellLetterX3]: isLetterX3(indexRow, indexCell),
+                  [classes.cellLetterX2]: isLetterX2(indexRow, indexCell),
+                  [classes.cellCenter]: indexRow === 7 && indexCell === 7,
                 });
 
                 return (
@@ -44,14 +36,14 @@ export const Board = () => {
         })}
       </div>
 
-      <div className={styles.lettersBox}>
-        <div className={styles.lettersBoxLetter}>a</div>
-        <div className={styles.lettersBoxLetter}>b</div>
-        <div className={styles.lettersBoxLetter}>c</div>
-        <div className={styles.lettersBoxLetter}>d</div>
-        <div className={styles.lettersBoxLetter}>e</div>
-        <div className={styles.lettersBoxLetter}>f</div>
-        <div className={styles.lettersBoxLetter}>g</div>
+      <div className={classes.lettersBox}>
+        <div className={classes.lettersBoxLetter}>a</div>
+        <div className={classes.lettersBoxLetter}>b</div>
+        <div className={classes.lettersBoxLetter}>c</div>
+        <div className={classes.lettersBoxLetter}>d</div>
+        <div className={classes.lettersBoxLetter}>e</div>
+        <div className={classes.lettersBoxLetter}>f</div>
+        <div className={classes.lettersBoxLetter}>g</div>
       </div>
     </>
   );
@@ -124,3 +116,25 @@ const isLetterX3 = (indexRow: number, indexCell: number) =>
   (indexRow === 9 && indexCell === 13) ||
   (indexRow === 13 && indexCell === 5) ||
   (indexRow === 13 && indexCell === 9);
+
+const useStyles = createStyles(() => ({
+  board: {},
+
+  row: {},
+
+  cell: {},
+
+  cellCenter: {},
+
+  cellWordX3: {},
+
+  cellWordX2: {},
+
+  cellLetterX3: {},
+
+  cellLetterX2: {},
+
+  lettersBox: {},
+
+  lettersBoxLetter: {},
+}));

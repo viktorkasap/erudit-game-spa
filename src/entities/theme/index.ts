@@ -1,1 +1,0 @@
-export { SwitchMode } from './SwitchMode';
