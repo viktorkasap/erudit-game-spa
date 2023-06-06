@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 
-import { createStyles } from '@mantine/core';
+import { Box, createStyles, Group, SimpleGrid } from '@mantine/core';
 
 import { $board } from './model';
 
@@ -12,10 +12,15 @@ export const Board = () => {
 
   return (
     <>
-      <div className={cx(classes.board)}>
+      <Box className={cx(classes.board)}>
         {board.map((row, indexRow) => {
           return (
-            <div key={`${row}-${indexRow}`} className={cx(classes.row)} data-row={indexRow}>
+            <Group
+              position="apart"
+              spacing="0.25rem"
+              key={`${row}-${indexRow}`}
+              className={cx(classes.row, { [classes.rowLast]: indexRow === board.length - 1 })}
+              data-row={indexRow}>
               {row.map((cell: null | string | number, indexCell: number) => {
                 const className = cx(classes.cell, {
                   [classes.cellWordX3]: isWordX3(indexRow, indexCell),
@@ -26,15 +31,23 @@ export const Board = () => {
                 });
 
                 return (
-                  <div key={`${cell}-${indexCell}`} className={className} data-cell={`${indexRow}-${indexCell}`}>
+                  <Box
+                    key={`${cell}-${indexCell}`}
+                    className={cx(className)}
+                    data-cell={`${indexRow}-${indexCell}`}
+                    data-cell-word-x3={isWordX3(indexRow, indexCell)}
+                    data-cell-word-x2={isWordX2(indexRow, indexCell)}
+                    data-cell-letter-x3={isLetterX3(indexRow, indexCell)}
+                    data-cell-letter-x2={isLetterX2(indexRow, indexCell)}
+                    data-cell-center={indexRow === 7 && indexCell === 7}>
                     R-{indexRow} C-{indexCell}
-                  </div>
+                  </Box>
                 );
               })}
-            </div>
+            </Group>
           );
         })}
-      </div>
+      </Box>
 
       <div className={classes.lettersBox}>
         <div className={classes.lettersBoxLetter}>a</div>
@@ -117,22 +130,55 @@ const isLetterX3 = (indexRow: number, indexCell: number) =>
   (indexRow === 13 && indexCell === 5) ||
   (indexRow === 13 && indexCell === 9);
 
-const useStyles = createStyles(() => ({
-  board: {},
+const useStyles = createStyles((theme) => ({
+  board: {
+    width: '49rem',
+    margin: '0 auto',
+    backgroundColor: theme.colors.dark[9],
+    borderRadius: '0.5rem',
+    border: '0.25rem solid',
+    borderColor: theme.colors.dark[9],
+  },
 
-  row: {},
+  row: {
+    marginBottom: '0.25rem',
+  },
+  rowLast: {
+    marginBottom: 0,
+  },
 
-  cell: {},
+  cell: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    height: '3rem',
+    width: '3rem',
+    fontSize: theme.fontSizes.sm,
+    backgroundColor: theme.colors.indian[3],
+    borderRadius: '0.25rem',
+    lineHeight: '1.2',
+  },
 
-  cellCenter: {},
+  cellCenter: {
+    backgroundColor: theme.colors.dark[5],
+  },
 
-  cellWordX3: {},
+  cellWordX3: {
+    backgroundColor: theme.colors.red[4],
+  },
 
-  cellWordX2: {},
+  cellWordX2: {
+    backgroundColor: theme.colors.blue[4],
+  },
 
-  cellLetterX3: {},
+  cellLetterX3: {
+    backgroundColor: theme.colors.yellow[4],
+  },
 
-  cellLetterX2: {},
+  cellLetterX2: {
+    backgroundColor: theme.colors.green[4],
+  },
 
   lettersBox: {},
 
