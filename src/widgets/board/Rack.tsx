@@ -1,10 +1,15 @@
 import { useDraggable, useDroppable } from '@dnd-kit/core';
+import { useStore } from 'effector-react';
 
 import { createStyles, Flex } from '@mantine/core';
 
+import { $rackLetters, changeRackLettersPosition } from 'widgets/board/model';
+
 export const Rack = () => {
   const { classes } = useStyles();
-  const letters = ['a', 'b', 'c', 'd', 'e', 'f', 'g'];
+  const letters = useStore($rackLetters);
+
+  // TODO dnd -> changeRackLettersPosition
 
   const { isOver, setNodeRef } = useDroppable({
     id: 'rack',

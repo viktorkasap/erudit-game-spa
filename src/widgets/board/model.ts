@@ -20,8 +20,8 @@ $board.watch((state) => {
 
 // Rack letters
 export const $rackLetters = createStore(['a', 'b', 'c', 'd', 'e', 'f', 'g']);
-export const { updateLettersWithPosition } = createApi($rackLetters, {
-  updateLettersWithPosition: (_, payload: string[]) => payload,
+export const { changeRackLettersPosition } = createApi($rackLetters, {
+  changeRackLettersPosition: (_, payload: string[]) => payload,
 });
 
 $rackLetters.watch((state) => {
