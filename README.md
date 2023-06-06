@@ -1,7 +1,7 @@
 
 
 ### TODO
-- [] Styles board/tails/words stack
+- [x] Styles board/tails/words stack
 - [] DND https://dndkit.com
 
 ---

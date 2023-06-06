@@ -1,4 +1,4 @@
-import { createStore } from 'effector';
+import { createApi, createStore } from 'effector';
 
 import { log } from 'shared/lib';
 
@@ -16,6 +16,16 @@ export const $board = createStore(buildNewBoard());
 
 $board.watch((state) => {
   log('[board]', state);
+});
+
+// Rack letters
+export const $rackLetters = createStore(['a', 'b', 'c', 'd', 'e', 'f', 'g']);
+export const { updateLettersWithPosition } = createApi($rackLetters, {
+  updateLettersWithPosition: (_, payload: string[]) => payload,
+});
+
+$rackLetters.watch((state) => {
+  log('[rack letters]', state);
 });
 
 /*

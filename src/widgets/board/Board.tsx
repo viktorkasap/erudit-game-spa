@@ -1,8 +1,9 @@
 import { useStore } from 'effector-react';
 
-import { Box, createStyles, Flex, Group } from '@mantine/core';
+import { Box, createStyles, Group } from '@mantine/core';
 
 import { $board } from './model';
+import { Rack } from './Rack';
 
 // RULES https://ru.wikipedia.org/wiki/%D0%A1%D0%BA%D1%80%D1%8D%D0%B1%D0%B1%D0%BB
 
@@ -49,15 +50,7 @@ export const Board = () => {
         })}
       </Box>
 
-      <Flex className={classes.rack} justify="center" align="center" mt="lg" p="md" gap="0.125rem">
-        <div className={classes.rackLetter}>a</div>
-        <div className={classes.rackLetter}>b</div>
-        <div className={classes.rackLetter}>c</div>
-        <div className={classes.rackLetter}>d</div>
-        <div className={classes.rackLetter}>e</div>
-        <div className={classes.rackLetter}>f</div>
-        <div className={classes.rackLetter}>g</div>
-      </Flex>
+      <Rack />
     </>
   );
 };
@@ -178,30 +171,5 @@ const useStyles = createStyles((theme) => ({
 
   cellLetterX2: {
     backgroundColor: theme.colors.green[4],
-  },
-
-  rack: {
-    width: '49rem',
-    margin: '0 auto',
-    backgroundColor: theme.colors.indian[4],
-    borderRadius: '0.5rem',
-    border: '0.25rem solid',
-    borderColor: theme.colors.indian[2],
-  },
-
-  rackLetter: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    textAlign: 'center',
-    height: '3rem',
-    width: '3rem',
-    fontSize: theme.fontSizes.xl,
-    textTransform: 'uppercase',
-    fontWeight: 600,
-    backgroundColor: theme.colors.dark[7],
-    borderRadius: '0.25rem',
-    lineHeight: '1.2',
-    color: theme.white,
   },
 }));
