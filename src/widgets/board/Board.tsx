@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 
-import { Box, createStyles, Group, SimpleGrid } from '@mantine/core';
+import { Box, createStyles, Flex, Group } from '@mantine/core';
 
 import { $board } from './model';
 
@@ -49,15 +49,15 @@ export const Board = () => {
         })}
       </Box>
 
-      <div className={classes.lettersBox}>
-        <div className={classes.lettersBoxLetter}>a</div>
-        <div className={classes.lettersBoxLetter}>b</div>
-        <div className={classes.lettersBoxLetter}>c</div>
-        <div className={classes.lettersBoxLetter}>d</div>
-        <div className={classes.lettersBoxLetter}>e</div>
-        <div className={classes.lettersBoxLetter}>f</div>
-        <div className={classes.lettersBoxLetter}>g</div>
-      </div>
+      <Flex className={classes.rack} justify="center" align="center" mt="lg" p="md" gap="0.125rem">
+        <div className={classes.rackLetter}>a</div>
+        <div className={classes.rackLetter}>b</div>
+        <div className={classes.rackLetter}>c</div>
+        <div className={classes.rackLetter}>d</div>
+        <div className={classes.rackLetter}>e</div>
+        <div className={classes.rackLetter}>f</div>
+        <div className={classes.rackLetter}>g</div>
+      </Flex>
     </>
   );
 };
@@ -180,7 +180,28 @@ const useStyles = createStyles((theme) => ({
     backgroundColor: theme.colors.green[4],
   },
 
-  lettersBox: {},
+  rack: {
+    width: '49rem',
+    margin: '0 auto',
+    backgroundColor: theme.colors.indian[4],
+    borderRadius: '0.5rem',
+    border: '0.25rem solid',
+    borderColor: theme.colors.indian[2],
+  },
 
-  lettersBoxLetter: {},
+  rackLetter: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    height: '3rem',
+    width: '3rem',
+    fontSize: theme.fontSizes.xl,
+    textTransform: 'uppercase',
+    fontWeight: 600,
+    backgroundColor: theme.colors.dark[7],
+    borderRadius: '0.25rem',
+    lineHeight: '1.2',
+    color: theme.white,
+  },
 }));
