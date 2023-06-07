@@ -1,6 +1,7 @@
 import { createApi, createStore } from 'effector';
 
 import { log } from 'shared/lib';
+import { shuffleArray } from 'shared/lib/shuffleArray';
 
 const buildNewBoard = () => {
   const boardSize = 15;
@@ -18,14 +19,24 @@ $board.watch((state) => {
   log('[board]', state);
 });
 
-// Rack letters
-export const $rackLetters = createStore(['a', 'b', 'c', 'd', 'e', 'f', 'g']);
-export const { changeRackLettersPosition } = createApi($rackLetters, {
-  changeRackLettersPosition: (_, payload: string[]) => payload,
+// Rack Tails
+export const $rackTails = createStore(['a', 'b', 'c', 'd', 'e', 'f', 'g']);
+export const { shuffleRackTails } = createApi($rackTails, {
+  shuffleRackTails: (state) => shuffleArray([...state]),
 });
 
-$rackLetters.watch((state) => {
-  log('[rack letters]', state);
+$rackTails.watch((state) => {
+  log('[Rack Tails]', state);
+});
+
+// Rack Tail Index
+export const $selectedRackTail = createStore<number | null>(null);
+export const { changeRackSelectedTail } = createApi($selectedRackTail, {
+  changeRackSelectedTail: (_, payload: number | null) => payload,
+});
+
+$selectedRackTail.watch((state) => {
+  log('[Rack Tail]', state);
 });
 
 /*
