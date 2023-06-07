@@ -1,7 +1,8 @@
-import { useDraggable, useDroppable } from '@dnd-kit/core';
+import { useState } from 'react';
+
 import { useStore } from 'effector-react';
 
-import { createStyles, Flex } from '@mantine/core';
+import { Box, createStyles, Flex } from '@mantine/core';
 
 import { $rackLetters, changeRackLettersPosition } from 'widgets/board/model';
 
@@ -9,46 +10,19 @@ export const Rack = () => {
   const { classes } = useStyles();
   const letters = useStore($rackLetters);
 
-  // TODO dnd -> changeRackLettersPosition
-
-  const { isOver, setNodeRef } = useDroppable({
-    id: 'rack',
-  });
-  const style = {
-    backgroundColor: isOver ? 'lightgreen' : undefined,
-  };
-
   return (
-    <Flex className={classes.rack} justify="center" align="center" mt="lg" p="md" gap="0.125rem" ref={setNodeRef} style={style}>
+    <Flex className={classes.rack} justify="center" align="center" mt="lg" p="md" gap="0.125rem">
       {letters.map((letter, index) => (
-        <RackLetter key={letter + index} letter={letter} />
+        <RackTail key={letter + index} letter={letter} />
       ))}
     </Flex>
   );
 };
 
-const RackLetter = ({ letter }: { letter: string }) => {
+const RackTail = ({ letter }: { letter: string }) => {
   const { classes, cx } = useStyles();
 
-  const { attributes, listeners, setNodeRef, transform } = useDraggable({
-    id: `draggable-${letter}`,
-  });
-  const style = transform
-    ? {
-        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
-      }
-    : undefined;
-
-  return (
-    <div
-      className={cx(classes.rackLetter, { [classes.rackLetterGrabbed]: transform })}
-      ref={setNodeRef}
-      {...listeners}
-      {...attributes}
-      style={style}>
-      {letter}
-    </div>
-  );
+  return <Box className={cx(classes.rackLetter, { [classes.rackLetterGrabbed]: true })}>{letter}</Box>;
 };
 
 const useStyles = createStyles((theme) => ({
@@ -75,11 +49,12 @@ const useStyles = createStyles((theme) => ({
     borderRadius: '0.25rem',
     lineHeight: '1.2',
     color: theme.white,
-    cursor: 'grab',
+    // cursor: 'grab',
+    cursor: 'pointer',
   },
 
   rackLetterGrabbed: {
-    cursor: 'grabbing',
-    backgroundColor: theme.colors.dark[5],
+    // cursor: 'grabbing',
+    backgroundColor: theme.colors.dark[4],
   },
 }));
