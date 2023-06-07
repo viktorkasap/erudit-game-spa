@@ -3,22 +3,6 @@ import { createApi, createStore } from 'effector';
 import { log } from 'shared/lib';
 import { shuffleArray } from 'shared/lib/shuffleArray';
 
-const buildNewBoard = () => {
-  const boardSize = 15;
-  const board = new Array(boardSize);
-  for (let i = 0; i < boardSize; i++) {
-    board[i] = new Array(boardSize).fill(null);
-  }
-
-  return board;
-};
-
-export const $board = createStore(buildNewBoard());
-
-$board.watch((state) => {
-  log('[board]', state);
-});
-
 // Rack Tails
 export const $rackTails = createStore(['a', 'b', 'c', 'd', 'e', 'f', 'g']);
 export const { shuffleRackTails } = createApi($rackTails, {
