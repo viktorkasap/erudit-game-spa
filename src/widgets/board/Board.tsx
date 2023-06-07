@@ -1,6 +1,6 @@
 import { useStore } from 'effector-react';
 
-import { Box, createStyles, Group } from '@mantine/core';
+import { Box, createStyles, Group, Text } from '@mantine/core';
 
 import { Cell } from 'widgets/board/Cell';
 
@@ -26,12 +26,8 @@ export const Board = () => {
               data-row={indexRow}>
               {row.map((cell: null | string | number, indexCell: number) => {
                 return (
-                  <Cell key={`cell-${indexCell}`} indexCell={indexCell} indexRow={indexRow}>
-                    {cell || (
-                      <>
-                        R-{indexRow} C-{indexCell}
-                      </>
-                    )}
+                  <Cell key={`cell-${indexCell}`} indexCell={indexCell} indexRow={indexRow} isEmpty={cell === null}>
+                    {cell}
                   </Cell>
                 );
               })}

@@ -1,7 +1,7 @@
 import { createApi, createStore } from 'effector';
+import produce from 'immer';
 
 import { log } from 'shared/lib';
-import { shuffleArray } from 'shared/lib/shuffleArray';
 
 const buildNewBoard = () => {
   const boardSize = 15;
@@ -14,6 +14,14 @@ const buildNewBoard = () => {
 };
 
 export const $board = createStore(buildNewBoard());
+
+export const { setCell } = createApi($board, {
+  setCell: (state, { indexRow, indexCell, letter }: { indexRow: number; indexCell: number; letter: string }) => {
+    return produce(state, (draft) => {
+      draft[indexRow][indexCell] = letter;
+    });
+  },
+});
 
 $board.watch((state) => {
   log('[board]', state);

@@ -5,8 +5,9 @@ import { shuffleArray } from 'shared/lib/shuffleArray';
 
 // Rack Tails
 export const $rackTails = createStore(['a', 'b', 'c', 'd', 'e', 'f', 'g']);
-export const { shuffleRackTails } = createApi($rackTails, {
+export const { shuffleRackTails, popRackTail } = createApi($rackTails, {
   shuffleRackTails: (state) => shuffleArray([...state]),
+  popRackTail: (state, payload) => [...state].filter((_, index) => index !== payload),
 });
 
 $rackTails.watch((state) => {
@@ -14,9 +15,9 @@ $rackTails.watch((state) => {
 });
 
 // Rack Tail Index
-export const $selectedRackTail = createStore<number | null>(null);
-export const { changeRackSelectedTail } = createApi($selectedRackTail, {
-  changeRackSelectedTail: (_, payload: number | null) => payload,
+export const $selectedRackTail = createStore<{ index: number; letter: string } | null>(null);
+export const { setSelectedTail } = createApi($selectedRackTail, {
+  setSelectedTail: (_, payload: { index: number; letter: string } | null) => payload,
 });
 
 $selectedRackTail.watch((state) => {

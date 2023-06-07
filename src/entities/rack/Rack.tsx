@@ -22,8 +22,9 @@ export const Rack = () => {
 
 const useStyles = createStyles((theme) => ({
   rack: {
+    height: '6rem',
     width: '49rem',
-    margin: '0 auto',
+    margin: '0 auto 2rem auto',
     backgroundColor: theme.colors.indian[4],
     borderRadius: '0.5rem',
     border: '0.25rem solid',

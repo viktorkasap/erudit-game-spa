@@ -2,13 +2,13 @@ import { IconAB2 } from '@tabler/icons-react';
 
 import { ActionIcon, createStyles } from '@mantine/core';
 
-import { changeRackSelectedTail, shuffleRackTails } from './model';
+import { setSelectedTail, shuffleRackTails } from './model';
 
 export const ShuffleButton = () => {
   const { classes } = useStyles();
 
   const handleShuffle = () => {
-    changeRackSelectedTail(null);
+    setSelectedTail(null);
     shuffleRackTails();
   };
 

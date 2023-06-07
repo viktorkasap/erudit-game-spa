@@ -1,9 +1,17 @@
 import { ReactNode } from 'react';
 
+import { useStore } from 'effector-react';
+
 import { Box, createStyles } from '@mantine/core';
 
-export const Cell = ({ children, indexCell, indexRow }: { children: ReactNode; indexCell: number; indexRow: number }) => {
+import { setCell } from 'entities/board';
+import { popRackTail, $selectedRackTail, setSelectedTail } from 'entities/rack';
+
+import { log } from 'shared/lib';
+
+export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
   const { classes, cx } = useStyles();
+  const tail = useStore($selectedRackTail);
 
   const className = cx(classes.cell, {
     [classes.cellWordX3]: isWordX3(indexRow, indexCell),
@@ -13,16 +21,43 @@ export const Cell = ({ children, indexCell, indexRow }: { children: ReactNode; i
     [classes.cellCenter]: indexRow === 7 && indexCell === 7,
   });
 
+  const handleClick = () => {
+    log('[row]', indexRow);
+    log('[cell]', indexCell);
+    if (isEmpty && tail?.letter) {
+      setCell({ indexRow, indexCell, letter: tail.letter });
+      setSelectedTail(null);
+      popRackTail(tail.index);
+    }
+  };
+
+  // TODO надо добавить возможность заменить поставленную букву если ход еще не подтвердился
+
   return (
     <Box
-      className={cx(className)}
+      onClick={handleClick}
+      className={isEmpty ? className : cx(classes.cell, classes.inactiveCell)}
       data-cell={`${indexRow}-${indexCell}`}
       data-cell-word-x3={isWordX3(indexRow, indexCell)}
       data-cell-word-x2={isWordX2(indexRow, indexCell)}
       data-cell-letter-x3={isLetterX3(indexRow, indexCell)}
       data-cell-letter-x2={isLetterX2(indexRow, indexCell)}
       data-cell-center={indexRow === 7 && indexCell === 7}>
-      {children}
+      {isEmpty ? (
+        isWordX3(indexRow, indexCell) ? (
+          <>Word x3</>
+        ) : isWordX2(indexRow, indexCell) ? (
+          <>Word x2</>
+        ) : isLetterX3(indexRow, indexCell) ? (
+          <>Letter x3</>
+        ) : isLetterX2(indexRow, indexCell) ? (
+          <>Letter x2</>
+        ) : (
+          children
+        )
+      ) : (
+        children
+      )}
     </Box>
   );
 };
@@ -104,6 +139,7 @@ const useStyles = createStyles((theme) => ({
     height: '3rem',
     width: '3rem',
     fontSize: theme.fontSizes.sm,
+    fontWeight: 500,
     backgroundColor: theme.colors.indian[3],
     borderRadius: '0.25rem',
     lineHeight: '1.2',
@@ -153,4 +189,24 @@ const useStyles = createStyles((theme) => ({
       backgroundColor: theme.colors.green[3],
     },
   },
+
+  inactiveCell: {
+    fontWeight: 600,
+    color: theme.white,
+    fontSize: theme.fontSizes.xl,
+    backgroundColor: theme.colors.dark[7],
+    cursor: 'default',
+    textTransform: 'uppercase',
+
+    '&:hover': {
+      backgroundColor: theme.colors.dark[7],
+    },
+  },
 }));
+
+interface CellProps {
+  children: ReactNode;
+  indexCell: number;
+  indexRow: number;
+  isEmpty: boolean;
+}
