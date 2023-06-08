@@ -193,12 +193,12 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
     color: white,
     fontWeight: 600,
     fontSize: fontSizes.xl,
-    backgroundColor: colors.dark[7],
+    backgroundColor: colors.dark[4],
     textTransform: 'uppercase',
     cursor: 'default',
 
     '&:hover': {
-      backgroundColor: colors.dark[7],
+      backgroundColor: colors.dark[4],
     },
   },
 }));
