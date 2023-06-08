@@ -1,23 +1,10 @@
-import { useStore } from 'effector-react';
-
 import { Box, createStyles } from '@mantine/core';
 
-import { $selectedRackTail, setSelectedTail } from './model';
-
-export const Tail = ({ letter, index }: TailProps) => {
+export const Tail = ({ letter, isSelected, onClick }: TailProps) => {
   const { classes, cx } = useStyles();
-  const selectedTail = useStore($selectedRackTail);
-
-  const handleSelected = () => {
-    if (selectedTail === null || selectedTail.index !== index) {
-      setSelectedTail({ index, letter });
-    } else {
-      setSelectedTail(null);
-    }
-  };
 
   return (
-    <Box className={cx(classes.tail, { [classes.tailSelected]: selectedTail?.index === index })} onClick={handleSelected}>
+    <Box className={cx(classes.tail, { [classes.tailSelected]: isSelected })} onClick={onClick}>
       {letter}
     </Box>
   );
@@ -56,5 +43,6 @@ const useStyles = createStyles((theme) => ({
 
 interface TailProps {
   letter: string;
-  index: number;
+  onClick: () => void;
+  isSelected: boolean;
 }

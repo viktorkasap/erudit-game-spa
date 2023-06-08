@@ -15,10 +15,15 @@ const buildNewBoard = () => {
 
 export const $board = createStore(buildNewBoard());
 
-export const { setCell } = createApi($board, {
+export const { setCell, setEmptyCell } = createApi($board, {
   setCell: (state, { indexRow, indexCell, letter }: { indexRow: number; indexCell: number; letter: string }) => {
     return produce(state, (draft) => {
       draft[indexRow][indexCell] = letter;
+    });
+  },
+  setEmptyCell: (state, { indexRow, indexCell }: { indexRow: number; indexCell: number }) => {
+    return produce(state, (draft) => {
+      draft[indexRow][indexCell] = null;
     });
   },
 });
