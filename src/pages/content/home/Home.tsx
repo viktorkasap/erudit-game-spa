@@ -1,6 +1,5 @@
 import { Board } from 'widgets/board';
-
-import { Rack } from 'entities/rack';
+import { Rack } from 'widgets/rack';
 
 const Home = () => {
   return (

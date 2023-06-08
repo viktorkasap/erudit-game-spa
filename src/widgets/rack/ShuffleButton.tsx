@@ -2,9 +2,8 @@ import { IconAB2 } from '@tabler/icons-react';
 
 import { ActionIcon, createStyles } from '@mantine/core';
 
+import { shuffleRackTails } from 'entities/rack';
 import { setSelectedTail } from 'entities/tail';
-
-import { shuffleRackTails } from './model';
 
 export const ShuffleButton = () => {
   const { classes } = useStyles();

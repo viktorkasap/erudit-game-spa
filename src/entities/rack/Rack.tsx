@@ -1,36 +1,13 @@
-import { useStore } from 'effector-react';
+import { FC, PropsWithChildren } from 'react';
 
 import { createStyles, Flex } from '@mantine/core';
 
-import { $selectedRackTail, setSelectedTail, Tail } from 'entities/tail';
-
-import { $rackTails } from './model';
-import { ShuffleButton } from './ShuffleButton';
-
-export const Rack = () => {
+export const Rack: FC<PropsWithChildren> = ({ children }) => {
   const { classes } = useStyles();
-  const tails = useStore($rackTails);
-  const selectedTail = useStore($selectedRackTail);
-
-  const handleSelected = ({ index, letter }: { index: number; letter: string }) => {
-    if (selectedTail === null || selectedTail.index !== index) {
-      setSelectedTail({ index, letter });
-    } else {
-      setSelectedTail(null);
-    }
-  };
 
   return (
     <Flex className={classes.rack} justify="center" align="center" mt="lg" p="md" gap="0.125rem">
-      {tails.map((letter, index) => (
-        <Tail
-          letter={letter}
-          key={letter + index}
-          isSelected={selectedTail?.index === index}
-          onClick={() => handleSelected({ index, letter })}
-        />
-      ))}
-      <ShuffleButton />
+      {children}
     </Flex>
   );
 };
