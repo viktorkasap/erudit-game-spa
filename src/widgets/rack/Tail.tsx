@@ -5,6 +5,8 @@ import { $selectedCell, setSelectedCell } from 'entities/cell';
 import { popRackTail } from 'entities/rack';
 import { $selectedRackTail, setSelectedTail, Tail as TailComponent } from 'entities/tail';
 
+import { log } from 'shared/lib';
+
 export const Tail = ({ index, tail }: TailProps) => {
   const selectedTail = useStore($selectedRackTail);
   const selectedCell = useStore($selectedCell);

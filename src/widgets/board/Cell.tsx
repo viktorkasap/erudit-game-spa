@@ -7,6 +7,8 @@ import { $selectedCell, Cell as CellComponent, setSelectedCell } from 'entities/
 import { popRackTail, setRackTail } from 'entities/rack';
 import { $selectedRackTail, setSelectedTail } from 'entities/tail';
 
+import { log } from 'shared/lib';
+
 export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
   const selectedTail = useStore($selectedRackTail);
   const selectedCell = useStore($selectedCell);
@@ -28,6 +30,7 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
     }
 
     if (isEmpty && selectedTail?.letter) {
+      setSelectedCell(null);
       setSelectedTail(null);
       popRackTail(selectedTail.index);
       setCell({ indexRow, indexCell, letter: selectedTail.letter });
