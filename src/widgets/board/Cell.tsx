@@ -28,9 +28,9 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
     }
 
     if (isEmpty && selectedTail?.letter) {
-      setCell({ indexRow, indexCell, letter: selectedTail.letter });
       setSelectedTail(null);
       popRackTail(selectedTail.index);
+      setCell({ indexRow, indexCell, letter: selectedTail.letter });
     }
   };
 
