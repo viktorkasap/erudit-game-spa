@@ -4,6 +4,7 @@ import { useStore } from 'effector-react';
 
 import { setCell, setEmptyCell } from 'entities/board';
 import { $selectedCell, Cell as CellComponent, setSelectedCell } from 'entities/cell';
+import { $playerTurnMoves, clearTurnPlayerMove, setTurnPlayerMove } from 'entities/player';
 import { popRackTail, setRackTail } from 'entities/rack';
 import { $selectedRackTail, setSelectedTail } from 'entities/tail';
 
@@ -12,6 +13,7 @@ import { log } from 'shared/lib';
 export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
   const selectedTail = useStore($selectedRackTail);
   const selectedCell = useStore($selectedCell);
+  const playerTurnMoves = useStore($playerTurnMoves);
 
   const isSelectedCurrentCell = selectedCell && selectedCell.indexCell === indexCell && selectedCell.indexRow === indexRow;
 
@@ -24,9 +26,11 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
       setSelectedCell({ indexRow, indexCell });
     }
 
-    if (!isEmpty) {
+    if (!isEmpty && playerTurnMoves.has(`${indexRow}-${indexCell}`)) {
       setRackTail(children);
       setEmptyCell({ indexRow, indexCell });
+
+      clearTurnPlayerMove(`${indexRow}-${indexCell}`);
     }
 
     if (isEmpty && selectedTail?.letter) {
@@ -34,6 +38,8 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
       setSelectedTail(null);
       popRackTail(selectedTail.index);
       setCell({ indexRow, indexCell, letter: selectedTail.letter });
+
+      setTurnPlayerMove(`${indexRow}-${indexCell}`);
     }
   };
 
@@ -43,7 +49,8 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
       indexRow={indexRow}
       indexCell={indexCell}
       onClick={handleCellClick}
-      isSelected={Boolean(isSelectedCurrentCell)}>
+      isSelected={Boolean(isSelectedCurrentCell)}
+      isEditable={playerTurnMoves.has(`${indexRow}-${indexCell}`)}>
       {children}
     </CellComponent>
   );

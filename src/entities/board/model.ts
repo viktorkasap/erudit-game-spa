@@ -13,7 +13,16 @@ const buildNewBoard = () => {
   return board;
 };
 
-export const $board = createStore(buildNewBoard());
+const initialBord = buildNewBoard();
+initialBord[7][4] = 'e';
+initialBord[7][5] = 'x';
+initialBord[7][6] = 'a';
+initialBord[7][7] = 'm';
+initialBord[7][8] = 'p';
+initialBord[7][9] = 'l';
+initialBord[7][10] = 'e';
+
+export const $board = createStore(initialBord);
 
 export const { setCell, setEmptyCell } = createApi($board, {
   setCell: (state, { indexRow, indexCell, letter }: { indexRow: number; indexCell: number; letter: string }) => {

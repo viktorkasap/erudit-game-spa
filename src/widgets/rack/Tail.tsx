@@ -2,10 +2,9 @@ import { useStore } from 'effector-react';
 
 import { setCell } from 'entities/board';
 import { $selectedCell, setSelectedCell } from 'entities/cell';
+import { setTurnPlayerMove } from 'entities/player';
 import { popRackTail } from 'entities/rack';
 import { $selectedRackTail, setSelectedTail, Tail as TailComponent } from 'entities/tail';
-
-import { log } from 'shared/lib';
 
 export const Tail = ({ index, tail }: TailProps) => {
   const selectedTail = useStore($selectedRackTail);
@@ -16,6 +15,7 @@ export const Tail = ({ index, tail }: TailProps) => {
       popRackTail(index);
       setSelectedCell(null);
       setSelectedTail(null);
+      setTurnPlayerMove(`${selectedCell.indexRow}-${selectedCell.indexCell}`);
       setCell({ indexRow: selectedCell.indexRow, indexCell: selectedCell.indexCell, letter });
 
       return;

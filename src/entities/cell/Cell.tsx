@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 import { Box, createStyles } from '@mantine/core';
 
-export const Cell = ({ children, indexCell, indexRow, isEmpty, onClick, isSelected }: CellProps) => {
+export const Cell = ({ children, indexCell, indexRow, isEmpty, onClick, isSelected, isEditable }: CellProps) => {
   const { classes, cx } = useStyles();
 
   const className = cx(classes.cell, {
@@ -12,12 +12,13 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty, onClick, isSelect
     [classes.cellLetterX2]: isLetterX2(indexRow, indexCell),
     [classes.cellCenter]: indexRow === 7 && indexCell === 7,
     [classes.cellSelected]: isSelected,
+    [classes.isEditable]: isEditable,
   });
 
   return (
     <Box
       onClick={onClick}
-      className={isEmpty ? className : cx(classes.cell, classes.inactiveCell)}
+      className={isEmpty || isEditable ? className : cx(classes.cell, classes.occupiedCell)}
       data-cell={`${indexRow}-${indexCell}`}
       data-cell-word-x3={isWordX3(indexRow, indexCell)}
       data-cell-word-x2={isWordX2(indexRow, indexCell)}
@@ -176,7 +177,7 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
     boxShadow: 'inset 0 0 0px 3px rgba(255,255,255,0.5)',
   },
 
-  inactiveCell: {
+  isEditable: {
     color: white,
     fontWeight: 600,
     fontSize: fontSizes.xl,
@@ -187,6 +188,19 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
       backgroundColor: colors.dark[6],
     },
   },
+
+  occupiedCell: {
+    color: white,
+    fontWeight: 600,
+    fontSize: fontSizes.xl,
+    backgroundColor: colors.dark[7],
+    textTransform: 'uppercase',
+    cursor: 'default',
+
+    '&:hover': {
+      backgroundColor: colors.dark[7],
+    },
+  },
 }));
 
 interface CellProps extends PropsWithChildren {
@@ -195,4 +209,5 @@ interface CellProps extends PropsWithChildren {
   isEmpty: boolean;
   isSelected: boolean;
   onClick: () => void;
+  isEditable: boolean;
 }
