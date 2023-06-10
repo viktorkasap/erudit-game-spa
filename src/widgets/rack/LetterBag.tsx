@@ -2,7 +2,7 @@ import { useStore } from 'effector-react';
 
 import { Box, createStyles, Text } from '@mantine/core';
 
-import { $letterBag, removeLetter } from 'entities/letterBag';
+import { $letterBag } from 'entities/letterBag';
 
 import { log } from 'shared/lib';
 
@@ -11,10 +11,6 @@ export const LetterBag = () => {
 
   const letterBag = useStore($letterBag);
   const countLetters = Object.values(letterBag).length;
-
-  // setTimeout(() => {
-  //   log('!!!', Object.values(letterBag).length);
-  // }, 3000);
 
   return (
     <Box className={classes.bag}>

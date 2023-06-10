@@ -3,8 +3,9 @@ import { useEffect, useState } from 'react';
 import { useStore } from 'effector-react';
 
 import { $board, Board as BoardComponent, setCell } from 'entities/board';
+import { setHistoryWord } from 'entities/history';
 import { removeLetter } from 'entities/letterBag';
-import { setTurnPlayer } from 'entities/turn';
+import { $turn, setTurnPlayer } from 'entities/turn';
 
 import { log } from 'shared/lib';
 
@@ -18,38 +19,46 @@ const buildInitialWord = () => {
   const wordsArray = Object.keys(words);
   const sevenLettersWords = wordsArray.filter((word) => word.length === 7);
 
-  const randomWord = sevenLettersWords[Math.floor(Math.random() * sevenLettersWords.length)];
+  return sevenLettersWords[Math.floor(Math.random() * sevenLettersWords.length)];
+};
 
-  log('[randomWord]', randomWord);
+const useStartGame = () => {
+  const indexRow = 7;
+  let indexCell = 4;
 
-  return randomWord;
+  return (firstWord: string) => {
+    const firstWordArray = firstWord.split('');
+
+    log('firstWordArray', firstWordArray);
+
+    firstWordArray.forEach((letter) => {
+      removeLetter(letter);
+      setCell({ indexRow, indexCell, letter });
+      indexCell += 1;
+    });
+
+    setHistoryWord({ player: 'computer', word: firstWord });
+    setTurnPlayer('player1');
+  };
 };
 
 export const Board = () => {
   const board = useStore($board);
+  const player = useStore($turn);
+
   const [firstWord, setFirstWord] = useState<string | null>(null);
+  const startGame = useStartGame();
 
   useEffect(() => {
     if (!firstWord) {
       setFirstWord(buildInitialWord());
     }
 
-    if (firstWord) {
-      const firstWordArray = firstWord.split('');
-      log('firstWordArray', firstWordArray);
-
-      const indexRow = 7;
-      let indexCell = 4;
-
-      firstWordArray.forEach((letter) => {
-        removeLetter(letter);
-        setCell({ indexRow, indexCell, letter });
-        indexCell += 1;
-      });
-
-      setTurnPlayer('player1');
+    if (firstWord && player === 'computer') {
+      log('[firstWord]', firstWord);
+      startGame(firstWord);
     }
-  }, [firstWord]);
+  }, [firstWord, player, startGame]);
 
   return (
     <BoardComponent>
