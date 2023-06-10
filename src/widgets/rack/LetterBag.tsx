@@ -25,7 +25,6 @@ const useStyles = createStyles((theme) => ({
     alignItems: 'center',
     flexDirection: 'column',
     padding: '0.5rem 1rem',
-    transition: 'background-color .2s ease',
     backgroundColor: theme.colors.yellow[9],
     borderRadius: theme.radius.md,
     color: theme.white,

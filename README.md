@@ -28,7 +28,11 @@
 
 # Словари
 
-> Словари от Яндекс - https://yandex.ru/dev/dictionary/doc/dg/reference/getLangs.html
+> Словари от Яндекс
+ 
+> #1 https://yandex.ru/dev/dictionary/doc/dg/reference/getLangs.html
+
+> #2 https://yandex.ru/dev/dictionary/doc/dg/reference/lookup.html
 
 ----
 

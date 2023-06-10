@@ -19,7 +19,7 @@ const useStyles = createStyles((theme) => ({
     margin: '0 auto 2rem auto',
     backgroundColor: theme.colors.indian[4],
     borderRadius: '0.5rem',
-    border: '0.25rem solid',
+    border: '0.1875rem solid',
     borderColor: theme.colors.indian[2],
     position: 'relative',
   },
