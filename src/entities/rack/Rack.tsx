@@ -6,7 +6,7 @@ export const Rack: FC<PropsWithChildren> = ({ children }) => {
   const { classes } = useStyles();
 
   return (
-    <Flex className={classes.rack} justify="center" align="center" mt="lg" p="md" gap="0.125rem">
+    <Flex className={classes.rack} justify="space-between" align="center" mt="lg" p="md" gap="0.25rem">
       {children}
     </Flex>
   );

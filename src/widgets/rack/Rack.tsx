@@ -18,9 +18,7 @@ export const Rack = () => {
   return (
     <RackComponent>
       <LetterBag />
-
       <Tails />
-
       <ShuffleButton />
     </RackComponent>
   );

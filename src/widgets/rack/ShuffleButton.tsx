@@ -30,20 +30,12 @@ const useStyles = createStyles((theme) => ({
   shuffle: {
     width: '3rem',
     height: '3rem',
-    position: 'absolute',
-    right: '1rem',
-    top: '50%',
-    transform: 'translateY(-50%)',
+    transform: 'translateY(0%)',
     transition: 'background-color .2s ease',
 
     '&:hover': {
-      transform: 'translateY(-50%)',
       backgroundColor: theme.colors.dark[7],
       color: theme.white,
-    },
-
-    '&:active': {
-      transform: 'translateY(-48%)',
     },
   },
 }));

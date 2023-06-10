@@ -2,6 +2,8 @@ import { useEffect, useState } from 'react';
 
 import { useStore } from 'effector-react';
 
+import { Flex } from '@mantine/core';
+
 import { Tail } from 'widgets/rack/Tail';
 
 import { $letterBag } from 'entities/letterBag';
@@ -27,10 +29,10 @@ export const Tails = () => {
   }, [bag, letters]);
 
   return (
-    <>
+    <Flex gap="0.25rem">
       {tails.map((tail, index) => (
         <Tail tail={tail} key={`tail-${index}`} index={index} />
       ))}
-    </>
+    </Flex>
   );
 };
