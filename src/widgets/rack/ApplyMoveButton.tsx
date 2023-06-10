@@ -5,7 +5,7 @@ import { ActionIcon, createStyles } from '@mantine/core';
 
 import { $playerTurnMoves } from 'entities/player';
 
-export const ApplyWordButton = () => {
+export const ApplyMoveButton = () => {
   const { classes } = useStyles();
   const playersMoves = useStore($playerTurnMoves);
 
