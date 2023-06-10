@@ -1,5 +1,8 @@
 import { useStore } from 'effector-react';
 
+import { Group } from '@mantine/core';
+
+import { ApplyWordButton } from 'widgets/rack/ApplyWordButton';
 import { LetterBag } from 'widgets/rack/LetterBag';
 
 import { Rack as RackComponent } from 'entities/rack';
@@ -18,8 +21,13 @@ export const Rack = () => {
   return (
     <RackComponent>
       <LetterBag />
+
       <Tails />
-      <ShuffleButton />
+
+      <Group spacing="0.25rem">
+        <ShuffleButton />
+        <ApplyWordButton />
+      </Group>
     </RackComponent>
   );
 };

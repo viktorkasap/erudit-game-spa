@@ -10,17 +10,13 @@ export const ShuffleButton = () => {
   const { classes } = useStyles();
   const tails = useStore($rackTails);
 
-  if (tails.length <= 1) {
-    return null;
-  }
-
   const handleShuffle = () => {
     setSelectedTail(null);
     shuffleRackTails();
   };
 
   return (
-    <ActionIcon onClick={handleShuffle} className={classes.shuffle} variant="light">
+    <ActionIcon onClick={handleShuffle} className={classes.shuffle} variant="light" disabled={tails.length <= 1}>
       <IconAB2 size="1rem" />
     </ActionIcon>
   );
@@ -36,6 +32,11 @@ const useStyles = createStyles((theme) => ({
     '&:hover': {
       backgroundColor: theme.colors.dark[7],
       color: theme.white,
+    },
+
+    '&[data-disabled]': {
+      backgroundColor: theme.colors.gray[7],
+      borderColor: theme.colors.gray[7],
     },
   },
 }));
