@@ -11,8 +11,8 @@ export const $history = createStore<Record<string, string[]>>({
   player2: [],
 });
 
-export const { setHistoryWord } = createApi($history, {
-  setHistoryWord: (state, payload: { player: Player; word: string }) => {
+export const { addWordToHistory } = createApi($history, {
+  addWordToHistory: (state, payload: { player: Player; word: string }) => {
     const { player, word } = payload;
 
     return produce(state, (draft) => {

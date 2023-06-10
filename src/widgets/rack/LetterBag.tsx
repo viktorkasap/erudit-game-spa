@@ -4,8 +4,6 @@ import { Box, createStyles, Text } from '@mantine/core';
 
 import { $letterBag } from 'entities/letterBag';
 
-import { log } from 'shared/lib';
-
 export const LetterBag = () => {
   const { classes } = useStyles();
 
@@ -34,5 +32,6 @@ const useStyles = createStyles((theme) => ({
     transition: 'background-color .2s ease',
     backgroundColor: theme.colors.yellow[9],
     borderRadius: theme.radius.md,
+    color: theme.white,
   },
 }));

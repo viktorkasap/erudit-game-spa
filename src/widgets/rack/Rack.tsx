@@ -2,14 +2,13 @@ import { useStore } from 'effector-react';
 
 import { LetterBag } from 'widgets/rack/LetterBag';
 
-import { $rackTails, Rack as RackComponent } from 'entities/rack';
+import { Rack as RackComponent } from 'entities/rack';
 import { $turn } from 'entities/turn';
 
 import { ShuffleButton } from './ShuffleButton';
-import { Tail } from './Tail';
+import { Tails } from './Tails';
 
 export const Rack = () => {
-  const tails = useStore($rackTails);
   const turnPlayer = useStore($turn);
 
   if (turnPlayer === 'computer') {
@@ -20,9 +19,7 @@ export const Rack = () => {
     <RackComponent>
       <LetterBag />
 
-      {tails.map((tail, index) => (
-        <Tail tail={tail} key={`tail-${index}`} index={index} />
-      ))}
+      <Tails />
 
       <ShuffleButton />
     </RackComponent>

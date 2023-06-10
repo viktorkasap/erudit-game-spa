@@ -1,12 +1,18 @@
 import { IconAB2 } from '@tabler/icons-react';
+import { useStore } from 'effector-react';
 
 import { ActionIcon, createStyles } from '@mantine/core';
 
-import { shuffleRackTails } from 'entities/rack';
+import { $rackTails, shuffleRackTails } from 'entities/rack';
 import { setSelectedTail } from 'entities/tail';
 
 export const ShuffleButton = () => {
   const { classes } = useStyles();
+  const tails = useStore($rackTails);
+
+  if (tails.length <= 1) {
+    return null;
+  }
 
   const handleShuffle = () => {
     setSelectedTail(null);

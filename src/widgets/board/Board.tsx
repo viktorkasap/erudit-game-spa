@@ -3,9 +3,9 @@ import { useEffect, useState } from 'react';
 import { useStore } from 'effector-react';
 
 import { $board, Board as BoardComponent, setCell } from 'entities/board';
-import { setHistoryWord } from 'entities/history';
+import { addWordToHistory } from 'entities/history';
 import { removeLetter } from 'entities/letterBag';
-import { $turn, setTurnPlayer } from 'entities/turn';
+import { $turn, setNextPlayer } from 'entities/turn';
 
 import { log } from 'shared/lib';
 
@@ -37,8 +37,8 @@ const useStartGame = () => {
       indexCell += 1;
     });
 
-    setHistoryWord({ player: 'computer', word: firstWord });
-    setTurnPlayer('player1');
+    addWordToHistory({ player: 'computer', word: firstWord });
+    setNextPlayer('player1');
   };
 };
 
