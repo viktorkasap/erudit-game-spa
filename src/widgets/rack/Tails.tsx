@@ -22,9 +22,14 @@ export const Tails = () => {
     }
 
     if (letters) {
-      letters?.forEach((letter) => {
+      'ромромс'.split('').forEach((letter) => {
         setRackTail(letter);
       });
+
+      // original
+      // letters?.forEach((letter) => {
+      //   setRackTail(letter);
+      // });
     }
   }, [bag, letters]);
 

@@ -1,4 +1,15 @@
+import { log } from 'shared/lib';
+
 import dictionary from '../../../../public/dict/ru/russian_nouns.json';
+
+/*
+  Проверки:
+  [х] если слово не существует в словаре - ошибка
+  [х] если слово которое добавил игрок уже есть в истории предыдущих ходов - ошибка
+  [ ] если игрок добавил слово за свой ход, например "ром" и где-то в другом месте еще раз написал "ром" - ошибка
+  [ ] если слово не пересекается с ранее добавленными словами или со словами которые добавил игррок за текущйи ход - ошибка
+  [ ] если буква не пересекается ни с одним словом которое было добавлено ранее или за текущий ход - ошибка
+ */
 
 type Board = string[][];
 type Word = string;
@@ -10,6 +21,7 @@ interface FindWordsReturnProps {
   validWords: Array<Word>;
   invalidWords: Array<Word>;
   existingWords: Array<Word>;
+  duplicatedWords: Array<Word>;
 }
 
 const getHorizontalWord = (board: Board, x: Cord, y: Cord) => {
@@ -40,6 +52,7 @@ export const findWords = (board: Board, movesArray: MovesArray, historyWords: Hi
   const allWords = new Set<Word>();
   const words = new Set<Word>();
   const existingWords = new Set<Word>();
+  const duplicatedWords = new Set<Word>();
 
   for (let x = 0; x < board.length; x++) {
     for (let y = 0; y < board[x].length; y++) {
@@ -92,8 +105,11 @@ export const findWords = (board: Board, movesArray: MovesArray, historyWords: Hi
     validWords: Array.from(playerWords),
     invalidWords: nonDictionaryWords,
     existingWords: Array.from(existingWords),
+    duplicatedWords: Array.from(duplicatedWords),
   };
 };
+
+/* ----------------------------- */
 
 /*
 const getHorizontalWord = (board, x, y) => {
@@ -181,3 +197,32 @@ export const findWords = (board, movesArray, historyWords) => {
 */
 
 /* ----------------------------- */
+
+const isLetterIntersected = (board: Board, x: Cord, y: Cord) => {
+  const directions = [
+    [0, 1],
+    [1, 0],
+    [0, -1],
+    [-1, 0],
+  ];
+  for (let i = 0; i < 4; i++) {
+    const nx = x + directions[i][0];
+    const ny = y + directions[i][1];
+    if (nx >= 0 && ny >= 0 && nx < board.length && ny < board[0].length && board[nx][ny]) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
+const isWordIntersected = (board: Board, movesArray: MovesArray) => {
+  for (const move of movesArray) {
+    const [x, y] = move;
+    if (isLetterIntersected(board, x, y)) {
+      return true;
+    }
+  }
+
+  return false;
+};

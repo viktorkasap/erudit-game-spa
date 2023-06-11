@@ -31,13 +31,21 @@ const useStartGame = () => {
 
     log('firstWordArray', firstWordArray);
 
-    firstWordArray.forEach((letter) => {
-      removeLetter(letter);
+    'обморок'.split('').forEach((letter) => {
       setCell({ indexRow, indexCell, letter });
       indexCell += 1;
     });
 
-    addWordToHistory({ player: 'computer', word: firstWord });
+    addWordToHistory({ player: 'computer', word: 'обморок' });
+
+    // original
+    // firstWordArray.forEach((letter) => {
+    //   removeLetter(letter);
+    //   setCell({ indexRow, indexCell, letter });
+    //   indexCell += 1;
+    // });
+
+    // addWordToHistory({ player: 'computer', word: firstWord });
     setNextPlayer('player1');
   };
 };
