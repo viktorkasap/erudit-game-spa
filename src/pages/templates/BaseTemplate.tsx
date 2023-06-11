@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 
 import { Container, rem } from '@mantine/core';
 
-import { ToggleSchema } from 'widgets/toggle-schema/ToggleSchema';
+import { ToggleSchema } from 'features/toggle-schema';
 
 import { ErrorBoundary, ProgressBarInit } from 'shared/lib';
 

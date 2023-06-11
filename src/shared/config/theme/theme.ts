@@ -17,6 +17,7 @@ export const theme: MantineThemeOverride = {
     yellow: ['#fef5c7', '#fdea8a', '#fdd94c', '#fcc623', '#f6a60a', '#da7e05', '#b55908', '#93440d', '#78380f', '#451c03'],
     green: ['#d1fadf', '#a8f2c6', '#6fe6a7', '#36d183', '#12b76a', '#079455', '#057747', '#075e3a', '#074d32', '#022c1c'],
     blue: ['#e2eefc', '#bddcfa', '#83bff6', '#429fee', '#228be6', '#0c66bd', '#0b5199', '#0d457f', '#113b69', '#0b2546'],
+    indian: ['#f2ebe2', '#e4d5c4', '#d2b99f', '#c5a285', '#b2805d', '#a46e52', '#895945', '#6f493d', '#5b3d33', '#301f1a'],
   },
   components: {
     // Anchor: {

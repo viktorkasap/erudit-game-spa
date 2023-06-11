@@ -6,6 +6,8 @@ export const GlobalStyles = () => {
   return (
     <Global
       styles={(theme) => {
+        // log('[theme]', theme);
+
         return {
           '*': {
             margin: 0,
