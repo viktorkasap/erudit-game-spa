@@ -30,10 +30,18 @@ const isWordInDictionary = (word: Word) => {
   return Object.prototype.hasOwnProperty.call(dictionary, word);
 };
 
-export const findWords = (board: Board, movesArray: MovesArray, historyWords: HistoryWords) => {
-  const allWords = new Set();
-  const words = new Set();
-  const existingWords = new Set();
+export const findWords = (
+  board: Board,
+  movesArray: MovesArray,
+  historyWords: HistoryWords,
+): {
+  validWords: Array<Word>;
+  invalidWords: Array<Word>;
+  existingWords: Array<Word>;
+} => {
+  const allWords = new Set<Word>();
+  const words = new Set<Word>();
+  const existingWords = new Set<Word>();
 
   for (let x = 0; x < board.length; x++) {
     for (let y = 0; y < board[x].length; y++) {
@@ -51,12 +59,14 @@ export const findWords = (board: Board, movesArray: MovesArray, historyWords: Hi
     }
   }
 
-  const playerWords = new Set();
-  const allPlayerWords = new Set();
+  const playerWords = new Set<Word>();
+  const allPlayerWords = new Set<Word>();
+  const soloLetters = new Set<Word>();
 
   for (const word of allWords) {
     for (const move of movesArray) {
-      if ((word as Word).includes(board[move[0]][move[1]])) {
+      const [x, y] = move;
+      if (word.includes(board[x][y])) {
         allPlayerWords.add(word);
         break;
       }
@@ -65,7 +75,8 @@ export const findWords = (board: Board, movesArray: MovesArray, historyWords: Hi
 
   for (const word of words) {
     for (const move of movesArray) {
-      if ((word as Word).includes(board[move[0]][move[1]])) {
+      const [x, y] = move;
+      if (word.includes(board[x][y])) {
         playerWords.add(word);
         break;
       }
