@@ -3,11 +3,11 @@ import { useStore } from 'effector-react';
 
 import { ActionIcon, createStyles } from '@mantine/core';
 
-import { $playerTurnMoves } from 'entities/player';
+import { $playerMoves } from 'entities/player';
 
 export const ApplyMoveButton = () => {
   const { classes } = useStyles();
-  const playersMoves = useStore($playerTurnMoves);
+  const playersMoves = useStore($playerMoves);
 
   return (
     <ActionIcon className={classes.button} variant="light" disabled={!playersMoves.size}>

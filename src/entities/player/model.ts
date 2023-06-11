@@ -4,9 +4,9 @@ import { log } from 'shared/lib';
 
 type TurnMap = Map<string, boolean>;
 
-export const $playerTurnMoves = createStore<TurnMap>(new Map());
+export const $playerMoves = createStore<TurnMap>(new Map());
 
-export const { addPlayerMove, removePlayerMove, clearAllPlayerMoves } = createApi($playerTurnMoves, {
+export const { addPlayerMove, removePlayerMove, clearAllPlayerMoves } = createApi($playerMoves, {
   addPlayerMove: (state: TurnMap, payload: string) => {
     return new Map(state.set(payload, true));
   },
@@ -18,6 +18,6 @@ export const { addPlayerMove, removePlayerMove, clearAllPlayerMoves } = createAp
   clearAllPlayerMoves: () => new Map(),
 });
 
-$playerTurnMoves.watch((state) => {
+$playerMoves.watch((state) => {
   log('[$playerTurnMoves]', state);
 });

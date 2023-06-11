@@ -4,7 +4,7 @@ import { useStore } from 'effector-react';
 
 import { setCell, setEmptyCell } from 'entities/board';
 import { $selectedCell, Cell as CellComponent, setSelectedCell } from 'entities/cell';
-import { $playerTurnMoves, removePlayerMove, addPlayerMove } from 'entities/player';
+import { $playerMoves, removePlayerMove, addPlayerMove } from 'entities/player';
 import { popRackTail, setRackTail } from 'entities/rack';
 import { $selectedRackTail, setSelectedTail } from 'entities/tail';
 
@@ -13,7 +13,7 @@ import { log } from 'shared/lib';
 export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
   const selectedTail = useStore($selectedRackTail);
   const selectedCell = useStore($selectedCell);
-  const playerTurnMoves = useStore($playerTurnMoves);
+  const playerTurnMoves = useStore($playerMoves);
 
   const isSelectedCurrentCell = selectedCell && selectedCell.indexCell === indexCell && selectedCell.indexRow === indexRow;
 
