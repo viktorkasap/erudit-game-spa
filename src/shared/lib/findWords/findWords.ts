@@ -6,6 +6,12 @@ type Cord = number;
 type MovesArray = number[][];
 type HistoryWords = string[];
 
+interface FindWordsReturnProps {
+  validWords: Array<Word>;
+  invalidWords: Array<Word>;
+  existingWords: Array<Word>;
+}
+
 const getHorizontalWord = (board: Board, x: Cord, y: Cord) => {
   let word = '';
   while (y < board[x].length && board[x][y]) {
@@ -30,15 +36,7 @@ const isWordInDictionary = (word: Word) => {
   return Object.prototype.hasOwnProperty.call(dictionary, word);
 };
 
-export const findWords = (
-  board: Board,
-  movesArray: MovesArray,
-  historyWords: HistoryWords,
-): {
-  validWords: Array<Word>;
-  invalidWords: Array<Word>;
-  existingWords: Array<Word>;
-} => {
+export const findWords = (board: Board, movesArray: MovesArray, historyWords: HistoryWords): FindWordsReturnProps => {
   const allWords = new Set<Word>();
   const words = new Set<Word>();
   const existingWords = new Set<Word>();
@@ -61,7 +59,6 @@ export const findWords = (
 
   const playerWords = new Set<Word>();
   const allPlayerWords = new Set<Word>();
-  const soloLetters = new Set<Word>();
 
   for (const word of allWords) {
     for (const move of movesArray) {
@@ -85,7 +82,6 @@ export const findWords = (
 
   const nonDictionaryWords = Array.from(allPlayerWords).filter((word) => !playerWords.has(word));
 
-  // Check if any of the player's words already exist on the board
   for (const word of allPlayerWords) {
     if (historyWords.includes(word as Word)) {
       existingWords.add(word);
