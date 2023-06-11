@@ -3,7 +3,7 @@ import { useStore } from 'effector-react';
 import { setCell } from 'entities/board';
 import { $selectedCell, setSelectedCell } from 'entities/cell';
 import { addPlayerMove } from 'entities/player';
-import { popRackTail } from 'entities/rack';
+import { removeLetterFromPlayer } from 'entities/rack';
 import { $selectedRackTail, setSelectedTail, Tail as TailComponent } from 'entities/tail';
 
 export const Tail = ({ index, tail }: TailProps) => {
@@ -12,7 +12,7 @@ export const Tail = ({ index, tail }: TailProps) => {
 
   const handleSelected = ({ index, letter }: { index: number; letter: string }) => {
     if (selectedCell) {
-      popRackTail(index);
+      removeLetterFromPlayer(index);
       setSelectedCell(null);
       setSelectedTail(null);
       addPlayerMove(`${selectedCell.indexRow}-${selectedCell.indexCell}`);

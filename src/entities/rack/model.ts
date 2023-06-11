@@ -5,10 +5,11 @@ import { shuffleArray } from 'shared/lib/shuffleArray';
 
 // Rack Tails
 export const $rackTails = createStore<string[]>([]);
-export const { shuffleRackTails, popRackTail, setRackTail } = createApi($rackTails, {
+
+export const { shuffleRackTails, removeLetterFromPlayer, addLetterToPlayer } = createApi($rackTails, {
   shuffleRackTails: (state) => shuffleArray([...state]),
-  popRackTail: (state, payload) => [...state].filter((_, index) => index !== payload),
-  setRackTail: (state, payload) => [...state, payload],
+  removeLetterFromPlayer: (state, payload) => [...state].filter((_, index) => index !== payload),
+  addLetterToPlayer: (state, payload) => [...state, payload],
 });
 
 $rackTails.watch((state) => {

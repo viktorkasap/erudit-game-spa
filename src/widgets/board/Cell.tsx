@@ -5,7 +5,7 @@ import { useStore } from 'effector-react';
 import { setCell, setEmptyCell } from 'entities/board';
 import { $selectedCell, Cell as CellComponent, setSelectedCell } from 'entities/cell';
 import { $playerMoves, removePlayerMove, addPlayerMove } from 'entities/player';
-import { popRackTail, setRackTail } from 'entities/rack';
+import { removeLetterFromPlayer, addLetterToPlayer } from 'entities/rack';
 import { $selectedRackTail, setSelectedTail } from 'entities/tail';
 
 import { log } from 'shared/lib';
@@ -27,7 +27,7 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
     }
 
     if (!isEmpty && playerTurnMoves.has(`${indexRow}-${indexCell}`)) {
-      setRackTail(children);
+      addLetterToPlayer(children);
       setEmptyCell({ indexRow, indexCell });
 
       removePlayerMove(`${indexRow}-${indexCell}`);
@@ -36,7 +36,7 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
     if (isEmpty && selectedTail?.letter) {
       setSelectedCell(null);
       setSelectedTail(null);
-      popRackTail(selectedTail.index);
+      removeLetterFromPlayer(selectedTail.index);
       setCell({ indexRow, indexCell, letter: selectedTail.letter });
 
       addPlayerMove(`${indexRow}-${indexCell}`);

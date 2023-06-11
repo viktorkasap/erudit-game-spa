@@ -7,7 +7,7 @@ import { Flex } from '@mantine/core';
 import { Tail } from 'widgets/rack/Tail';
 
 import { $letterBag } from 'entities/letterBag';
-import { $rackTails, setRackTail } from 'entities/rack';
+import { $rackTails, addLetterToPlayer } from 'entities/rack';
 
 import { shuffleArray } from 'shared/lib/shuffleArray';
 
@@ -23,7 +23,7 @@ export const Tails = () => {
 
     if (letters) {
       'ромромс'.split('').forEach((letter) => {
-        setRackTail(letter);
+        addLetterToPlayer(letter);
       });
 
       // original

@@ -14,12 +14,17 @@ export const PlayerScore = () => {
   const historyWords = Object.values(history).flat();
   const playerMovesArray = Array.from(playerMoves.keys()).map((key) => key.split('-').map(Number));
 
-  const { validWords, existingWords, invalidWords, duplicatedWords } = findWords(board, playerMovesArray, historyWords);
+  const { validWords, existingWords, invalidWords, duplicatedWords, nonIntersectingWords } = findWords(
+    board,
+    playerMovesArray,
+    historyWords,
+  );
 
   log('[validWords]', validWords);
   log('[existingWords]', existingWords);
   log('[invalidWords]', invalidWords);
   log('[duplicatedWords]', duplicatedWords);
+  log('[nonIntersectingWords]', nonIntersectingWords);
 
   return <>0/0</>;
 };

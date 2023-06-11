@@ -6,8 +6,8 @@ import dictionary from '../../../../public/dict/ru/russian_nouns.json';
   Проверки:
   [х] если слово не существует в словаре - ошибка
   [х] если слово которое добавил игрок уже есть в истории предыдущих ходов - ошибка
-  [ ] если игрок добавил слово за свой ход, например "ром" и где-то в другом месте еще раз написал "ром" - ошибка
-  [ ] если слово не пересекается с ранее добавленными словами или со словами которые добавил игррок за текущйи ход - ошибка
+  [x] если игрок добавил слово за свой ход, например "ром" и где-то в другом месте еще раз написал "ром" - ошибка
+  [ ] если слово не пересекается с ранее добавленными словами или со словами которые добавил игрок за текущий ход - ошибка
   [?] если буква не пересекается ни с одним словом которое было добавлено ранее или за текущий ход - ошибка
       (?) эту проверку можно опустить наверное, если игрок добавит букву которая не пересекается ни с одним словом,
       то я получу просто пустые массивы, я могу по этому условию деактивировать кнопку применить
@@ -24,6 +24,7 @@ interface FindWordsReturnProps {
   invalidWords: Array<Word>;
   existingWords: Array<Word>;
   duplicatedWords: Array<Word>;
+  nonIntersectingWords: Array<Word>;
 }
 
 const getHorizontalWord = (board: Board, x: Cord, y: Cord) => {
@@ -50,10 +51,21 @@ const isWordInDictionary = (word: Word) => {
   return Object.prototype.hasOwnProperty.call(dictionary, word);
 };
 
+const doesWordIntersect = (word: Word, words: Word[]): boolean => {
+  for (const existingWord of words) {
+    if (word.includes(existingWord) || existingWord.includes(word)) {
+      return true;
+    }
+  }
+
+  return false;
+};
+
 export const findWords = (board: Board, movesArray: MovesArray, historyWords: HistoryWords): FindWordsReturnProps => {
   const words = new Set<Word>();
   const existingWords = new Set<Word>();
   const playerWords: Word[] = [];
+  const nonIntersectingWords = [];
 
   for (const move of movesArray) {
     const [x, y] = move;
@@ -76,10 +88,19 @@ export const findWords = (board: Board, movesArray: MovesArray, historyWords: Hi
   const nonDictionaryWords = playerWords.filter((word) => !words.has(word));
   const duplicatedWords = playerWords.filter((word, index) => playerWords.indexOf(word) !== index);
 
+  for (const word of playerWords) {
+    // Если слово не пересекается ни с одним из ранее добавленных слов и слов текущего хода
+    if (!doesWordIntersect(word, [...historyWords, ...playerWords])) {
+      // добавляем его в массив nonIntersectingWords
+      nonIntersectingWords.push(word);
+    }
+  }
+
   return {
     validWords: Array.from(words),
     invalidWords: nonDictionaryWords,
     existingWords: Array.from(existingWords),
+    nonIntersectingWords,
     duplicatedWords,
   };
 };
