@@ -18,6 +18,10 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
   const isSelectedCurrentCell = selectedCell && selectedCell.indexCell === indexCell && selectedCell.indexRow === indexRow;
 
   const handleCellClick = () => {
+    /*
+    Принцип единственной ответственности (Single Responsibility Principle, SRP): Каждый класс/модуль/функция должен иметь только одну ответственность.
+В вашем коде, например, функция handleCellClick в файле Cell.tsx выполняет несколько разных задач: она обрабатывает клик по ячейке, проверяет, является ли текущая ячейка выбранной, устанавливает выбранную ячейку, удаляет букву из руки игрока, устанавливает ячейку и добавляет ход игрока. Это может быть разделено на несколько более мелких функций, каждая из которых выполняет только одну задачу.
+     */
     if (isSelectedCurrentCell) {
       setSelectedCell(null);
     }

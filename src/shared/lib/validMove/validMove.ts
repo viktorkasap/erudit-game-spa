@@ -1,7 +1,5 @@
 import { log } from 'shared/lib';
 
-import dictionary from '../../../../public/dict/ru/russian_nouns.json';
-
 /*
   Проверки:
   [ ] если слово не существует в словаре - ошибка
@@ -26,92 +24,26 @@ interface ValidMoveReturnProps {
   nonIntersectingWords: Array<Word>;
 }
 
-const getHorizontalWord = (board: Board, x: Cord, y: Cord) => {
-  let word = '';
+function checkIntersection(board: Board, moves: PlayerMoves) {
+  // Проверяем, что хотя бы одна буква нового слова смежна с уже существующим словом
+  return moves.some(([row, col]) => {
+    const adjacentCells = [
+      [row - 1, col],
+      [row + 1, col],
+      [row, col - 1],
+      [row, col + 1],
+    ];
 
-  while (y < board[x].length && board[x][y]) {
-    word += board[x][y];
-    y++;
-  }
-
-  return word;
-};
-
-const getVerticalWord = (board: Board, x: Cord, y: Cord) => {
-  let word = '';
-
-  while (x < board.length && board[x][y]) {
-    word += board[x][y];
-    x++;
-  }
-
-  return word;
-};
-
-const isExistingHistoryWord = (word: Word, history: HistoryWords) => {
-  return history.includes(word);
-};
-
-const isWordInDictionary = (word: Word) => {
-  return Object.prototype.hasOwnProperty.call(dictionary, word);
-};
-
-const getDirection = (playerMoves: PlayerMoves) => {
-  if (playerMoves.length <= 1) {
-    return undefined;
-  }
-
-  const [x, y] = playerMoves[0];
-  const horizontal = playerMoves.every((move) => move[0] === x);
-  const vertical = playerMoves.every((move) => move[1] === y);
-
-  if (horizontal) {
-    return 'horizontal';
-  }
-
-  if (vertical) {
-    return 'vertical';
-  }
-
-  return undefined;
-};
-
-const getSortedMoves = (playerMoves: PlayerMoves, direction: 'horizontal' | 'vertical' | undefined) => {
-  if (!direction) {
-    return playerMoves;
-  }
-
-  if (direction === 'horizontal') {
-    return [...playerMoves].sort((x, y) => x[1] - y[1]);
-  }
-
-  if (direction === 'vertical') {
-    return [...playerMoves].sort((x, y) => x[0] - y[0]);
-  }
-};
+    return adjacentCells.some(([adjRow, adjCol]) => {
+      return adjRow >= 0 && adjRow < board.length && adjCol >= 0 && adjCol < board.length && board[adjRow][adjCol] !== null;
+    });
+  });
+}
 
 export const validMove = ({ board, historyWords, playerMoves }: { board: Board; historyWords: HistoryWords; playerMoves: PlayerMoves }) => {
-  const direction = getDirection(playerMoves);
-  const sortedMoves = getSortedMoves(playerMoves, direction);
+  const isIntersection = checkIntersection(board, playerMoves);
 
-  log('board', board);
-  log('historyWords', historyWords);
-  log('playerMovesArray', playerMoves);
-  log('direction', direction);
-  log('sortedMoves', sortedMoves);
-
-  const movedWord = '';
-  const error = '';
-
-  for (let row = 0; row < board.length; row += 1) {
-    // log('row', row, board[row]);
-
-    for (let cell = 0; cell < board[row].length; cell += 1) {
-      // log('cell', cell, row, board[row][cell]);
-    }
-  }
-
-  // log('[moveWord --> ]', movedWord);
+  log('[isIntersection]', isIntersection);
 
   return {};
 };
