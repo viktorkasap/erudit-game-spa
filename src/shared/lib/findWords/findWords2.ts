@@ -8,9 +8,7 @@ import dictionary from '../../../../public/dict/ru/russian_nouns.json';
   [х] если слово которое добавил игрок уже есть в истории предыдущих ходов - ошибка
   [ ] если игрок добавил слово за свой ход, например "ром" и где-то в другом месте еще раз написал "ром" - ошибка
   [ ] если слово не пересекается с ранее добавленными словами или со словами которые добавил игррок за текущйи ход - ошибка
-  [?] если буква не пересекается ни с одним словом которое было добавлено ранее или за текущий ход - ошибка
-      (?) эту проверку можно опустить наверное, если игрок добавит букву которая не пересекается ни с одним словом,
-      то я получу просто пустые массивы, я могу по этому условию деактивировать кнопку применить
+  [ ] если буква не пересекается ни с одним словом которое было добавлено ранее или за текущий ход - ошибка
  */
 
 type Board = string[][];
@@ -51,36 +49,63 @@ const isWordInDictionary = (word: Word) => {
 };
 
 export const findWords = (board: Board, movesArray: MovesArray, historyWords: HistoryWords): FindWordsReturnProps => {
+  const allWords = new Set<Word>();
   const words = new Set<Word>();
   const existingWords = new Set<Word>();
-  const playerWords: Word[] = [];
+  const duplicatedWords = new Set<Word>();
 
-  for (const move of movesArray) {
-    const [x, y] = move;
-    if (y === 0 || !board[x][y - 1]) {
-      const word = getHorizontalWord(board, x, y);
-      if (word.length > 1) playerWords.push(word);
-    }
+  for (let x = 0; x < board.length; x++) {
+    for (let y = 0; y < board[x].length; y++) {
+      if (y === 0 || !board[x][y - 1]) {
+        const word = getHorizontalWord(board, x, y);
+        if (word.length > 1 && !historyWords.includes(word)) allWords.add(word);
+        if (word.length > 1 && isWordInDictionary(word) && !historyWords.includes(word)) words.add(word);
+      }
 
-    if (x === 0 || !board[x - 1][y]) {
-      const word = getVerticalWord(board, x, y);
-      if (word.length > 1) playerWords.push(word);
+      if (x === 0 || !board[x - 1][y]) {
+        const word = getVerticalWord(board, x, y);
+        if (word.length > 1 && !historyWords.includes(word)) allWords.add(word);
+        if (word.length > 1 && isWordInDictionary(word) && !historyWords.includes(word)) words.add(word);
+      }
     }
   }
 
-  for (const word of playerWords) {
-    if (isWordInDictionary(word) && !historyWords.includes(word)) words.add(word);
-    if (historyWords.includes(word)) existingWords.add(word);
+  const playerWords = new Set<Word>();
+  const allPlayerWords = new Set<Word>();
+
+  for (const word of allWords) {
+    for (const move of movesArray) {
+      const [x, y] = move;
+      if (word.includes(board[x][y])) {
+        allPlayerWords.add(word);
+        break;
+      }
+    }
   }
 
-  const nonDictionaryWords = playerWords.filter((word) => !words.has(word));
-  const duplicatedWords = playerWords.filter((word, index) => playerWords.indexOf(word) !== index);
+  for (const word of words) {
+    for (const move of movesArray) {
+      const [x, y] = move;
+      if (word.includes(board[x][y])) {
+        playerWords.add(word);
+        break;
+      }
+    }
+  }
+
+  const nonDictionaryWords = Array.from(allPlayerWords).filter((word) => !playerWords.has(word));
+
+  for (const word of allPlayerWords) {
+    if (historyWords.includes(word as Word)) {
+      existingWords.add(word);
+    }
+  }
 
   return {
-    validWords: Array.from(words),
+    validWords: Array.from(playerWords),
     invalidWords: nonDictionaryWords,
     existingWords: Array.from(existingWords),
-    duplicatedWords,
+    duplicatedWords: Array.from(duplicatedWords),
   };
 };
 
