@@ -38,6 +38,10 @@ const useStartGame = () => {
 
     addWordToHistory({ player: 'computer', word: 'обморок' });
 
+    setCell({ indexRow: 6, indexCell: 4, letter: 'р' });
+    setCell({ indexRow: 8, indexCell: 4, letter: 'м' });
+    addWordToHistory({ player: 'player2', word: 'ром' });
+
     // original
     // firstWordArray.forEach((letter) => {
     //   removeLetter(letter);
