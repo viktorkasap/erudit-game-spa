@@ -106,16 +106,16 @@ export const validMove = ({ board, historyWords, playerMoves }: { board: Board; 
   // 1 найти пересечения со словами которые уже есть
   // 2 найти слова которые образуют пересечения
 
-  // const direction = getDirection(playerMoves);
-  // const sortedMoves = getSortedMoves(playerMoves, direction);
-  // const word = getWord(board, sortedMoves, direction);
+  const direction = getDirection(playerMoves);
+  const sortedMoves = getSortedMoves(playerMoves, direction);
+  const word = getWord(board, sortedMoves, direction);
 
-  log('board', board);
-  log('historyWords', historyWords);
-  log('playerMovesArray', playerMoves);
-  // log('direction', direction);
-  // log('sortedMoves', sortedMoves);
-  // log('word', word);
+  // log('board', board);
+  // log('historyWords', historyWords);
+  // log('playerMovesArray', playerMoves);
+  log('direction', direction);
+  log('sortedMoves', sortedMoves);
+  log('word', word);
 
   const movedWord = '';
   const error = '';

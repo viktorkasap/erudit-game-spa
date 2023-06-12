@@ -8,6 +8,12 @@ type Board = Word[][];
 type PlayerMoves = Cord[][];
 type HistoryWords = Word[];
 
+interface WordWithCoordinates {
+  word: string;
+  start: [number, number];
+  end: [number, number];
+}
+
 interface ValidMoveReturnProps {
   validWords: Array<Word>;
   invalidWords: Array<Word>;
@@ -58,55 +64,56 @@ function getHorizontalWord(board: Board, row: number, col: number): string {
   return word;
 }
 
-function getWords(board: Board, playerMoves: PlayerMoves): Word[] {
-  const words: Word[] = [];
+function getWords(board: Board, playerMoves: PlayerMoves): WordWithCoordinates[] {
+  const words: WordWithCoordinates[] = [];
 
   for (const [row, col] of playerMoves) {
     const verticalWord = getVerticalWord(board, row, col);
     const horizontalWord = getHorizontalWord(board, row, col);
 
     if (verticalWord.length > 1) {
-      words.push(verticalWord);
+      const startRow = row - verticalWord.indexOf(board[row][col]);
+      const endRow = startRow + verticalWord.length - 1;
+      words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col] });
     }
 
     if (horizontalWord.length > 1) {
-      words.push(horizontalWord);
+      const startCol = col - horizontalWord.indexOf(board[row][col]);
+      const endCol = startCol + horizontalWord.length - 1;
+      words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol] });
     }
   }
 
   return words;
 }
 
-function checkIntersection(board: Board, moves: PlayerMoves, historyWords: HistoryWords) {
-  // Проверяем, что хотя бы одна буква нового слова смежна с уже существующим словом
-  return moves.some(([row, col]) => {
-    const adjacentCells = [
-      [row - 1, col],
-      [row + 1, col],
-      [row, col - 1],
-      [row, col + 1],
-    ];
+function checkIntersection(board: Board, wordsWithCoordinates: WordWithCoordinates[]) {
+  // Проверяем, что хотя бы одна буква каждого нового слова смежна с уже существующим словом
+  return wordsWithCoordinates.every(({ start, end }) => {
+    const [startRow, startCol] = start;
+    const [endRow, endCol] = end;
 
-    return adjacentCells.some(([adjRow, adjCol]) => {
-      if (adjRow >= 0 && adjRow < board.length && adjCol >= 0 && adjCol < board.length && board[adjRow][adjCol] !== null) {
-        // Проверяем, является ли смежная клетка частью того же слова, что и ход игрока
-        const verticalWord1 = getVerticalWord(board, row, col);
-        const verticalWord2 = getVerticalWord(board, adjRow, adjCol);
-        const horizontalWord1 = getHorizontalWord(board, row, col);
-        const horizontalWord2 = getHorizontalWord(board, adjRow, adjCol);
-
-        // Проверяем, являются ли слова, содержащие смежную клетку и клетку хода игрока, частью истории ходов
-        const isPartOfHistory = historyWords.includes(verticalWord2) || historyWords.includes(horizontalWord2);
-
-        return (verticalWord1 === verticalWord2 || horizontalWord1 === horizontalWord2) && isPartOfHistory;
+    if (startRow === endRow) {
+      // Это горизонтальное слово
+      for (let col = startCol; col <= endCol; col++) {
+        if (board[startRow - 1]?.[col] || board[startRow + 1]?.[col]) {
+          return true;
+        }
       }
+    } else {
+      // Это вертикальное слово
+      for (let row = startRow; row <= endRow; row++) {
+        if (board[row]?.[startCol - 1] || board[row]?.[startCol + 1]) {
+          return true;
+        }
+      }
+    }
 
-      return false;
-    });
+    return false;
   });
 }
 
-function checkWords(words: Word[]): boolean {
+function checkDictionaryWords(words: Word[]): boolean {
   for (const word of words) {
     log('check-word', word, isWordInDictionary(word));
     if (!isWordInDictionary(word)) {
@@ -118,19 +125,19 @@ function checkWords(words: Word[]): boolean {
 }
 
 export const validMove = ({ board, historyWords, playerMoves }: { board: Board; historyWords: HistoryWords; playerMoves: PlayerMoves }) => {
-  const isIntersection = checkIntersection(board, playerMoves, historyWords);
   const words = getWords(board, playerMoves);
-  const validWords = checkWords(words);
+  const isIntersection = checkIntersection(board, words);
+  const validDictionaryWords = checkDictionaryWords(words.map((collection) => collection.word));
 
-  if (!isIntersection) {
-    log('Error isIntersection', 'нет пересечений с другими словами');
+  // if (!isIntersection) {
+  //   log('Error isIntersection', 'нет пересечений с другими словами');
+  //
+  //   return false;
+  // }
 
-    return false;
-  }
-
-  log('[isIntersection]', isIntersection);
   log('[words]', words);
-  log('[validWords]', validWords);
+  log('[isIntersection]', isIntersection);
+  log('[validDictionaryWords]', validDictionaryWords);
 
   return {};
 };
