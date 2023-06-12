@@ -8,7 +8,8 @@
 
 # Пример игры на гитхабе
 
-> https://github.com/contragents/erudit.club
+> 1) https://github.com/contragents/erudit.club
+> 2) https://github.com/Nikolai2038/erudite
 
 ---
 ### Refs
