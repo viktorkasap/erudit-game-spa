@@ -31,22 +31,22 @@ const useStartGame = () => {
 
     log('firstWordArray', firstWordArray);
 
-    'потомок'.split('').forEach((letter) => {
+    'полоний'.split('').forEach((letter) => {
       setCell({ indexRow, indexCell, letter });
       indexCell += 1;
     });
-    addWordToHistory({ player: 'computer', word: 'потомок' });
+    addWordToHistory({ player: 'computer', word: 'полоний' });
 
-    setCell({ indexRow: 8, indexCell: 4, letter: 'р' });
-    setCell({ indexRow: 9, indexCell: 4, letter: 'о' });
-    setCell({ indexRow: 10, indexCell: 4, letter: 'к' });
-    addWordToHistory({ player: 'player2', word: 'прок' });
+    setCell({ indexRow: 8, indexCell: 4, letter: 'а' });
+    setCell({ indexRow: 9, indexCell: 4, letter: 'к' });
+    setCell({ indexRow: 10, indexCell: 4, letter: 'е' });
+    setCell({ indexRow: 11, indexCell: 4, letter: 'т' });
+    addWordToHistory({ player: 'player2', word: 'пакет' });
 
     setCell({ indexRow: 8, indexCell: 8, letter: 'о' });
     setCell({ indexRow: 9, indexCell: 8, letter: 'р' });
-    setCell({ indexRow: 10, indexCell: 8, letter: 'я' });
-    setCell({ indexRow: 11, indexCell: 8, letter: 'к' });
-    addWordToHistory({ player: 'player2', word: 'моряк' });
+    setCell({ indexRow: 10, indexCell: 8, letter: 'а' });
+    addWordToHistory({ player: 'player2', word: 'нора' });
 
     // original
     // firstWordArray.forEach((letter) => {

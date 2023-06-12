@@ -87,7 +87,7 @@ function getWords(board: Board, playerMoves: PlayerMoves): Word[] {
   return words;
 }
 
-function checkIntersection(board: Board, moves: PlayerMoves) {
+function checkIntersection(board: Board, moves: PlayerMoves, historyWords: HistoryWords) {
   // Проверяем, что хотя бы одна буква нового слова смежна с уже существующим словом
   return moves.some(([row, col]) => {
     const adjacentCells = [
@@ -98,13 +98,27 @@ function checkIntersection(board: Board, moves: PlayerMoves) {
     ];
 
     return adjacentCells.some(([adjRow, adjCol]) => {
-      return adjRow >= 0 && adjRow < board.length && adjCol >= 0 && adjCol < board.length && board[adjRow][adjCol] !== null;
+      if (adjRow >= 0 && adjRow < board.length && adjCol >= 0 && adjCol < board.length && board[adjRow][adjCol] !== null) {
+        // Проверяем, является ли смежная клетка частью того же слова, что и ход игрока
+        const verticalWord1 = getVerticalWord(board, row, col);
+        const verticalWord2 = getVerticalWord(board, adjRow, adjCol);
+        const horizontalWord1 = getHorizontalWord(board, row, col);
+        const horizontalWord2 = getHorizontalWord(board, adjRow, adjCol);
+
+        // Проверяем, являются ли слова, содержащие смежную клетку и клетку хода игрока, частью истории ходов
+        const isPartOfHistory = historyWords.includes(verticalWord2) || historyWords.includes(horizontalWord2);
+
+        return (verticalWord1 === verticalWord2 || horizontalWord1 === horizontalWord2) && isPartOfHistory;
+      }
+
+      return false;
     });
   });
 }
 
 function checkWords(words: Word[]): boolean {
   for (const word of words) {
+    log('check-word', word, isWordInDictionary(word));
     if (!isWordInDictionary(word)) {
       return false;
     }
@@ -114,7 +128,7 @@ function checkWords(words: Word[]): boolean {
 }
 
 export const validMove = ({ board, historyWords, playerMoves }: { board: Board; historyWords: HistoryWords; playerMoves: PlayerMoves }) => {
-  const isIntersection = checkIntersection(board, playerMoves);
+  const isIntersection = checkIntersection(board, playerMoves, historyWords);
   const words = getWords(board, playerMoves);
   const validWords = checkWords(words);
 
