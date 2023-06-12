@@ -12,6 +12,7 @@ interface WordWithCoordinates {
   word: string;
   start: [number, number];
   end: [number, number];
+  orphan: boolean;
 }
 
 interface ValidMoveReturnProps {
@@ -71,16 +72,25 @@ function getWords(board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
     const verticalWord = getVerticalWord(board, row, col);
     const horizontalWord = getHorizontalWord(board, row, col);
 
+    log('verticalWord', verticalWord);
+    log('horizontalWord', horizontalWord);
+
+    if (verticalWord === horizontalWord) {
+      const startCol = col - horizontalWord.indexOf(board[row][col]);
+      const endCol = startCol + horizontalWord.length - 1;
+      words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: true });
+    }
+
     if (verticalWord.length > 1) {
       const startRow = row - verticalWord.indexOf(board[row][col]);
       const endRow = startRow + verticalWord.length - 1;
-      words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col] });
+      words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false });
     }
 
     if (horizontalWord.length > 1) {
       const startCol = col - horizontalWord.indexOf(board[row][col]);
       const endCol = startCol + horizontalWord.length - 1;
-      words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol] });
+      words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false });
     }
   }
 
