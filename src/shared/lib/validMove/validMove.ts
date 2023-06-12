@@ -1,5 +1,7 @@
 import { log } from 'shared/lib';
 
+import dictionary from '../../../../public/dict/ru/words.json';
+
 /*
   Проверки:
   [ ] если слово не существует в словаре - ошибка
@@ -24,6 +26,67 @@ interface ValidMoveReturnProps {
   nonIntersectingWords: Array<Word>;
 }
 
+const isWordInDictionary = (word: Word) => {
+  return Object.prototype.hasOwnProperty.call(dictionary, word);
+};
+
+function getVerticalWord(board: Board, row: number, col: number): string {
+  let startRow = row;
+  while (startRow > 0 && board[startRow - 1][col]) {
+    startRow--;
+  }
+
+  let endRow = row;
+  while (endRow < board.length - 1 && board[endRow + 1][col]) {
+    endRow++;
+  }
+
+  let word = '';
+  for (let i = startRow; i <= endRow; i++) {
+    word += board[i][col];
+  }
+
+  return word;
+}
+
+function getHorizontalWord(board: Board, row: number, col: number): string {
+  let startCol = col;
+  while (startCol > 0 && board[row][startCol - 1]) {
+    startCol--;
+  }
+
+  let endCol = col;
+  while (endCol < board[0].length - 1 && board[row][endCol + 1]) {
+    endCol++;
+  }
+
+  let word = '';
+  for (let i = startCol; i <= endCol; i++) {
+    word += board[row][i];
+  }
+
+  return word;
+}
+
+function getWords(board: Board, playerMoves: PlayerMoves): Word[] {
+  const words: Word[] = [];
+
+  for (const [row, col] of playerMoves) {
+    const verticalWord = getVerticalWord(board, row, col);
+    const horizontalWord = getHorizontalWord(board, row, col);
+
+    if (verticalWord.length > 1) {
+      words.push(verticalWord);
+    }
+
+    if (horizontalWord.length > 1) {
+      words.push(horizontalWord);
+    }
+  }
+
+  return words;
+}
+
 function checkIntersection(board: Board, moves: PlayerMoves) {
   // Проверяем, что хотя бы одна буква нового слова смежна с уже существующим словом
   return moves.some(([row, col]) => {
@@ -40,10 +103,28 @@ function checkIntersection(board: Board, moves: PlayerMoves) {
   });
 }
 
+function checkWords(words: Word[]): boolean {
+  for (const word of words) {
+    if (!isWordInDictionary(word)) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
 export const validMove = ({ board, historyWords, playerMoves }: { board: Board; historyWords: HistoryWords; playerMoves: PlayerMoves }) => {
   const isIntersection = checkIntersection(board, playerMoves);
+  const words = getWords(board, playerMoves);
+  const validWords = checkWords(words);
+
+  if (!isIntersection) {
+    return false;
+  }
 
   log('[isIntersection]', isIntersection);
+  log('[words]', words);
+  log('[validWords]', validWords);
 
   return {};
 };

@@ -22,7 +22,7 @@ export const Tails = () => {
     }
 
     if (letters) {
-      'ромромс'.split('').forEach((letter) => {
+      'ромромн'.split('').forEach((letter) => {
         addLetterToPlayer(letter);
       });
 

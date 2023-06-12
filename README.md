@@ -4,6 +4,12 @@
 - [x] Styles board/tails/words stack
 - [] DND https://dndkit.com
 
+----
+
+# Пример игры на гитхабе
+
+> https://github.com/contragents/erudit.club
+
 ---
 ### Refs
 > ICONS https://tabler-icons.io

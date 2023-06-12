@@ -9,7 +9,7 @@ import { $turn, setNextPlayer } from 'entities/turn';
 
 import { log } from 'shared/lib';
 
-import words from '../../../public/dict/ru/russian_nouns.json';
+import words from '../../../public/dict/ru/words.json';
 
 import { Row } from './Row';
 
@@ -31,16 +31,22 @@ const useStartGame = () => {
 
     log('firstWordArray', firstWordArray);
 
-    'обморок'.split('').forEach((letter) => {
+    'потомок'.split('').forEach((letter) => {
       setCell({ indexRow, indexCell, letter });
       indexCell += 1;
     });
+    addWordToHistory({ player: 'computer', word: 'потомок' });
 
-    addWordToHistory({ player: 'computer', word: 'обморок' });
+    setCell({ indexRow: 8, indexCell: 4, letter: 'р' });
+    setCell({ indexRow: 9, indexCell: 4, letter: 'о' });
+    setCell({ indexRow: 10, indexCell: 4, letter: 'к' });
+    addWordToHistory({ player: 'player2', word: 'прок' });
 
-    setCell({ indexRow: 6, indexCell: 4, letter: 'р' });
-    setCell({ indexRow: 8, indexCell: 4, letter: 'м' });
-    addWordToHistory({ player: 'player2', word: 'ром' });
+    setCell({ indexRow: 8, indexCell: 8, letter: 'о' });
+    setCell({ indexRow: 9, indexCell: 8, letter: 'р' });
+    setCell({ indexRow: 10, indexCell: 8, letter: 'я' });
+    setCell({ indexRow: 11, indexCell: 8, letter: 'к' });
+    addWordToHistory({ player: 'player2', word: 'моряк' });
 
     // original
     // firstWordArray.forEach((letter) => {
