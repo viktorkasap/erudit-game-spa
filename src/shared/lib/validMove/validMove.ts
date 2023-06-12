@@ -72,9 +72,6 @@ function getWords(board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
     const verticalWord = getVerticalWord(board, row, col);
     const horizontalWord = getHorizontalWord(board, row, col);
 
-    log('verticalWord', verticalWord);
-    log('horizontalWord', horizontalWord);
-
     if (verticalWord === horizontalWord) {
       const startCol = col - horizontalWord.indexOf(board[row][col]);
       const endCol = startCol + horizontalWord.length - 1;
