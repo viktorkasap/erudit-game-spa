@@ -7,16 +7,15 @@ import { addWordToHistory } from 'entities/history';
 import { removeLetter } from 'entities/letterBag';
 import { $turn, setNextPlayer } from 'entities/turn';
 
+import dictionary from 'shared/assets/dict/ru/words.json';
 import { log } from 'shared/lib';
-
-import words from '../../../public/dict/ru/words.json';
 
 import { Row } from './Row';
 
 // const apiKey = import.meta.env.VITE_YANDEX_DICT_API_KEY;
 
 const buildInitialWord = () => {
-  const wordsArray = Object.keys(words);
+  const wordsArray = Object.keys(dictionary);
   const sevenLettersWords = wordsArray.filter((word) => word.length === 7);
 
   return sevenLettersWords[Math.floor(Math.random() * sevenLettersWords.length)];

@@ -1,15 +1,5 @@
+import dictionary from 'shared/assets/dict/ru/words.json';
 import { log } from 'shared/lib';
-
-import dictionary from '../../../../public/dict/ru/words.json';
-
-/*
-  Проверки:
-  [ ] если слово не существует в словаре - ошибка
-  [ ] если слово которое добавил игрок уже есть в истории предыдущих ходов - ошибка
-  [ ] если игрок добавил слово за свой ход, например "ром" и где-то в другом месте еще раз написал "ром" - ошибка
-  [ ] если слово не пересекается с ранее добавленными словами или со словами которые добавил игрок за текущий ход - ошибка
-  [ ] если буква не пересекается ни с одним словом которое было добавлено ранее или за текущий ход - ошибка
- */
 
 type Word = string;
 type Cord = number;
@@ -133,6 +123,8 @@ export const validMove = ({ board, historyWords, playerMoves }: { board: Board; 
   const validWords = checkWords(words);
 
   if (!isIntersection) {
+    log('Error isIntersection', 'нет пересечений с другими словами');
+
     return false;
   }
 

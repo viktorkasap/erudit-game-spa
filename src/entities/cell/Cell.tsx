@@ -15,6 +15,8 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty, onClick, isSelect
     [classes.isEditable]: isEditable,
   });
 
+  // todo переделать вместо классов на дата атрибуты: [data-cell-word-x3]="true"
+
   return (
     <Box
       onClick={onClick}
