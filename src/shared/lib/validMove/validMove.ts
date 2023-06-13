@@ -93,7 +93,8 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
     }
   }
 
-  return uniqWith(words, isEqual);
+  // return uniqWith(words, isEqual);
+  return words;
 };
 
 const checkIntersection = (board: Board, wordsWithCoordinates: WordWithCoordinates[]) => {
@@ -159,22 +160,23 @@ const checkDictionaryWords = (words: Word[]): Word[] => {
 
 export const validMove = ({ board, historyWords, playerMoves }: { board: Board; historyWords: HistoryWords; playerMoves: PlayerMoves }) => {
   const words = getWords(board, playerMoves);
-  const isIntersection = checkIntersection(board, words);
-  const validDictionaryWords = checkDictionaryWords(words.map((collection) => collection.word));
-  const doubleWords = checkDoubleWords(words, historyWords);
+  // const isIntersection = checkIntersection(board, words);
+  // const validDictionaryWords = checkDictionaryWords(words.map((collection) => collection.word));
+  // const doubleWords = checkDoubleWords(words, historyWords);
 
-  if (!isIntersection) {
-    return { error: 'Нет пересечений с другими словами' };
-  }
-
-  if (validDictionaryWords.length) {
-    return { error: `Слов '${validDictionaryWords.join(', ')}' нет слова в словаре` };
-  }
-
+  // log('[historyWords]', historyWords);
   log('[words]', words);
-  log('[isIntersection]', isIntersection);
-  log('[validDictionaryWords]', validDictionaryWords);
-  log('[doubleWords]', doubleWords);
+  // log('[isIntersection]', isIntersection);
+  // log('[validDictionaryWords]', validDictionaryWords);
+  // log('[doubleWords]', doubleWords);
+
+  // if (!isIntersection) {
+  //   return { error: 'Нет пересечений с другими словами' };
+  // }
+  //
+  // if (validDictionaryWords.length) {
+  //   return { error: `Слов '${validDictionaryWords.join(', ')}' нет слова в словаре` };
+  // }
 
   return {};
 };

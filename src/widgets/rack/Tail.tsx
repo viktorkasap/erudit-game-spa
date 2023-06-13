@@ -15,7 +15,7 @@ export const Tail = ({ index, tail }: TailProps) => {
       removeLetterFromPlayer(index);
       setSelectedCell(null);
       setSelectedTail(null);
-      addPlayerMove(`${selectedCell.indexRow}-${selectedCell.indexCell}`);
+      addPlayerMove({ position: `${selectedCell.indexRow}-${selectedCell.indexCell}`, letter });
       setCell({ indexRow: selectedCell.indexRow, indexCell: selectedCell.indexCell, letter });
 
       return;

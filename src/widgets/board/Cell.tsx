@@ -43,7 +43,7 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
       removeLetterFromPlayer(selectedTail.index);
       setCell({ indexRow, indexCell, letter: selectedTail.letter });
 
-      addPlayerMove(`${indexRow}-${indexCell}`);
+      addPlayerMove({ position: `${indexRow}-${indexCell}`, letter: selectedTail.letter });
     }
   };
 
