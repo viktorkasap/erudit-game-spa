@@ -10,6 +10,10 @@
 
 > 1) https://github.com/contragents/erudit.club
 > 2) https://github.com/Nikolai2038/erudite
+> 3) калькулятор хода https://github.com/tit/erudite/blob/master/public/javascript/calculator.js
+> 4) проверки https://github.com/Nikolai2038/erudite/blob/master/Erudite/Erudite/FormGame.cs
+> 5) слова https://github.com/RiordanFols/scrabble_assistant/blob/master/resources/dictionaries/word_rus.txt
+> 6) статья https://habr.com/ru/articles/191432/
 
 ---
 ### Refs
