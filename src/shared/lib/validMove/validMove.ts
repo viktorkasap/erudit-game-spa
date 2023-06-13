@@ -1,3 +1,5 @@
+import { isEqual, uniqWith } from 'lodash';
+
 import dictionary from 'shared/assets/dict/ru/words.json';
 import { log } from 'shared/lib';
 
@@ -91,7 +93,7 @@ function getWords(board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
     }
   }
 
-  return words;
+  return uniqWith(words, isEqual);
 }
 
 function checkIntersection(board: Board, wordsWithCoordinates: WordWithCoordinates[]) {
@@ -120,6 +122,28 @@ function checkIntersection(board: Board, wordsWithCoordinates: WordWithCoordinat
   });
 }
 
+const checkDoubleWords = (words: WordWithCoordinates[], historyWords: HistoryWords) => {
+  const doubleWords: { word: string; count: number }[] = [];
+  const countWords: Record<string, number> = {};
+  const wordsArray = words.map(({ word }) => word);
+
+  [...historyWords, ...wordsArray].forEach((word) => {
+    if (!countWords[word]) {
+      countWords[word] = 1;
+    } else {
+      countWords[word] = countWords[word] + 1;
+    }
+  });
+
+  Object.entries(countWords).forEach(([word, count]) => {
+    if (count > 1) {
+      doubleWords.push({ word, count });
+    }
+  });
+
+  return doubleWords;
+};
+
 function checkDictionaryWords(words: Word[]): boolean {
   for (const word of words) {
     log('check-word', word, isWordInDictionary(word));
@@ -135,6 +159,7 @@ export const validMove = ({ board, historyWords, playerMoves }: { board: Board; 
   const words = getWords(board, playerMoves);
   const isIntersection = checkIntersection(board, words);
   const validDictionaryWords = checkDictionaryWords(words.map((collection) => collection.word));
+  const doubleWords = checkDoubleWords(words, historyWords);
 
   // if (!isIntersection) {
   //   log('Error isIntersection', 'нет пересечений с другими словами');
@@ -145,6 +170,7 @@ export const validMove = ({ board, historyWords, playerMoves }: { board: Board; 
   log('[words]', words);
   log('[isIntersection]', isIntersection);
   log('[validDictionaryWords]', validDictionaryWords);
+  log('[doubleWords]', doubleWords);
 
   return {};
 };
