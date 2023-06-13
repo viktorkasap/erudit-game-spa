@@ -144,15 +144,17 @@ const checkDoubleWords = (words: WordWithCoordinates[], historyWords: HistoryWor
   return doubleWords;
 };
 
-function checkDictionaryWords(words: Word[]): boolean {
+function checkDictionaryWords(words: Word[]): Word[] {
+  const errorWords = [];
+
   for (const word of words) {
     log('check-word', word, isWordInDictionary(word));
     if (!isWordInDictionary(word)) {
-      return false;
+      errorWords.push(word);
     }
   }
 
-  return true;
+  return errorWords;
 }
 
 export const validMove = ({ board, historyWords, playerMoves }: { board: Board; historyWords: HistoryWords; playerMoves: PlayerMoves }) => {
@@ -161,11 +163,13 @@ export const validMove = ({ board, historyWords, playerMoves }: { board: Board; 
   const validDictionaryWords = checkDictionaryWords(words.map((collection) => collection.word));
   const doubleWords = checkDoubleWords(words, historyWords);
 
-  // if (!isIntersection) {
-  //   log('Error isIntersection', 'нет пересечений с другими словами');
-  //
-  //   return false;
-  // }
+  if (!isIntersection) {
+    return { error: 'Нет пересечений с другими словами' };
+  }
+
+  if (validDictionaryWords.length) {
+    return { error: `Слов '${validDictionaryWords.join(', ')}' нет слова в словаре` };
+  }
 
   log('[words]', words);
   log('[isIntersection]', isIntersection);
