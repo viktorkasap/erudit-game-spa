@@ -29,7 +29,7 @@ const isWordInDictionary = (word: Word) => {
   return Object.prototype.hasOwnProperty.call(dictionary, word);
 };
 
-function getVerticalWord(board: Board, row: number, col: number): string {
+const getVerticalWord = (board: Board, row: number, col: number): string => {
   let startRow = row;
   while (startRow > 0 && board[startRow - 1][col]) {
     startRow--;
@@ -46,9 +46,9 @@ function getVerticalWord(board: Board, row: number, col: number): string {
   }
 
   return word;
-}
+};
 
-function getHorizontalWord(board: Board, row: number, col: number): string {
+const getHorizontalWord = (board: Board, row: number, col: number): string => {
   let startCol = col;
   while (startCol > 0 && board[row][startCol - 1]) {
     startCol--;
@@ -65,9 +65,9 @@ function getHorizontalWord(board: Board, row: number, col: number): string {
   }
 
   return word;
-}
+};
 
-function getWords(board: Board, playerMoves: PlayerMoves): WordWithCoordinates[] {
+const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[] => {
   const words: WordWithCoordinates[] = [];
 
   for (const [row, col] of playerMoves) {
@@ -94,9 +94,9 @@ function getWords(board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
   }
 
   return uniqWith(words, isEqual);
-}
+};
 
-function checkIntersection(board: Board, wordsWithCoordinates: WordWithCoordinates[]) {
+const checkIntersection = (board: Board, wordsWithCoordinates: WordWithCoordinates[]) => {
   // Проверяем, что хотя бы одна буква каждого нового слова смежна с уже существующим словом
   return wordsWithCoordinates.every(({ start, end }) => {
     const [startRow, startCol] = start;
@@ -120,7 +120,7 @@ function checkIntersection(board: Board, wordsWithCoordinates: WordWithCoordinat
 
     return false;
   });
-}
+};
 
 const checkDoubleWords = (words: WordWithCoordinates[], historyWords: HistoryWords) => {
   const doubleWords: { word: string; count: number }[] = [];
@@ -144,7 +144,7 @@ const checkDoubleWords = (words: WordWithCoordinates[], historyWords: HistoryWor
   return doubleWords;
 };
 
-function checkDictionaryWords(words: Word[]): Word[] {
+const checkDictionaryWords = (words: Word[]): Word[] => {
   const errorWords = [];
 
   for (const word of words) {
@@ -155,7 +155,7 @@ function checkDictionaryWords(words: Word[]): Word[] {
   }
 
   return errorWords;
-}
+};
 
 export const validMove = ({ board, historyWords, playerMoves }: { board: Board; historyWords: HistoryWords; playerMoves: PlayerMoves }) => {
   const words = getWords(board, playerMoves);
