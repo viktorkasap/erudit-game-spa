@@ -1,1 +1,0 @@
-export { validMove } from './validMove';

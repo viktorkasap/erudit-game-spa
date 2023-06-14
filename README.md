@@ -14,6 +14,8 @@
 > 4) проверки https://github.com/Nikolai2038/erudite/blob/master/Erudite/Erudite/FormGame.cs
 > 5) слова https://github.com/RiordanFols/scrabble_assistant/blob/master/resources/dictionaries/word_rus.txt
 > 6) статья https://habr.com/ru/articles/191432/
+> 7) слова https://github.com/RiordanFols/scrabble_assistant/blob/master/resources/dictionaries/nouns.txt
+> 8) проверки https://github.com/RiordanFols/scrabble_assistant/blob/master/assistant/scrabble_assistant.py
 
 ---
 ### Refs
