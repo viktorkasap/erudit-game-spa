@@ -6,7 +6,8 @@ import { $board } from 'entities/board';
 import { $history } from 'entities/history';
 import { $playerMoves } from 'entities/player';
 
-import { log, checkMove } from 'shared/lib';
+import { log } from 'shared/lib';
+import { checkMove } from 'shared/lib/game';
 
 import { PlayerScore } from './PlayerScore';
 

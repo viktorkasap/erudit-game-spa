@@ -2,7 +2,7 @@ import { PropsWithChildren } from 'react';
 
 import { Box, createStyles } from '@mantine/core';
 
-import { bonus } from 'shared/lib';
+import { bonus } from 'shared/lib/game';
 
 export const Cell = ({ children, indexCell, indexRow, isEmpty, onClick, isSelected, isEditable }: CellProps) => {
   const { classes, cx } = useStyles();
