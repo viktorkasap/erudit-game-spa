@@ -34,23 +34,37 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty, onClick, isSelect
       data-cell-letter-x3={isLetterX3}
       data-cell-letter-x2={isLetterX2}
       data-cell-center={indexRow === 7 && indexCell === 7}>
-      {isEmpty ? (
-        isWordX3 ? (
-          <>Word x3</>
-        ) : isWordX2 ? (
-          <>Word x2</>
-        ) : isLetterX3 ? (
-          <>Letter x3</>
-        ) : isLetterX2 ? (
-          <>Letter x2</>
-        ) : (
-          children
-        )
-      ) : (
-        children
-      )}
+      {isEmpty ? <PlaceHolder isWordX3={isWordX3} isWordX2={isWordX2} isLetterX3={isLetterX3} isLetterX2={isLetterX2} /> : children}
     </Box>
   );
+};
+
+const PlaceHolder = ({
+  isWordX3,
+  isWordX2,
+  isLetterX3,
+  isLetterX2,
+}: {
+  isWordX3: boolean;
+  isWordX2: boolean;
+  isLetterX3: boolean;
+  isLetterX2: boolean;
+}) => {
+  switch (true) {
+    case isWordX3:
+      return <>Word x3</>;
+    case isWordX2:
+      return <>Word x2</>;
+
+    case isLetterX3:
+      return <>Letter x3</>;
+
+    case isLetterX2:
+      return <>Letter x2</>;
+
+    default:
+      return null;
+  }
 };
 
 const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
