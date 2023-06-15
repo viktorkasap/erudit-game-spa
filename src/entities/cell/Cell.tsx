@@ -1,10 +1,10 @@
 import { PropsWithChildren } from 'react';
 
-import { Box, createStyles } from '@mantine/core';
+import { Box, createStyles, Text } from '@mantine/core';
 
 import { bonus } from 'shared/lib/game';
 
-export const Cell = ({ children, indexCell, indexRow, isEmpty, onClick, isSelected, isEditable }: CellProps) => {
+export const Cell = ({ children, value, indexCell, indexRow, isEmpty, onClick, isSelected, isEditable }: CellProps) => {
   const { classes, cx } = useStyles();
 
   const isWordX3 = bonus.wordX3.includes(`${indexRow}-${indexCell}`);
@@ -22,8 +22,6 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty, onClick, isSelect
     [classes.isEditable]: isEditable,
   });
 
-  // todo переделать вместо классов на дата атрибуты: [data-cell-word-x3]="true"
-
   return (
     <Box
       onClick={onClick}
@@ -34,7 +32,16 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty, onClick, isSelect
       data-cell-letter-x3={isLetterX3}
       data-cell-letter-x2={isLetterX2}
       data-cell-center={indexRow === 7 && indexCell === 7}>
-      {isEmpty ? <PlaceHolder isWordX3={isWordX3} isWordX2={isWordX2} isLetterX3={isLetterX3} isLetterX2={isLetterX2} /> : children}
+      {isEmpty ? (
+        <PlaceHolder isWordX3={isWordX3} isWordX2={isWordX2} isLetterX3={isLetterX3} isLetterX2={isLetterX2} />
+      ) : (
+        <>
+          {children}
+          <Text className={classes.value} fz="xs" fw={100}>
+            {value}
+          </Text>
+        </>
+      )}
     </Box>
   );
 };
@@ -75,6 +82,7 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
     textAlign: 'center',
     height: '3rem',
     width: '3rem',
+    position: 'relative',
     color: colorScheme === 'dark' ? colors.dark[5] : colors.dark[5],
     fontSize: fontSizes.sm,
     fontWeight: 600,
@@ -156,6 +164,12 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
       backgroundColor: colors.dark[4],
     },
   },
+
+  value: {
+    position: 'absolute',
+    right: '4px',
+    bottom: 0,
+  },
 }));
 
 interface CellProps extends PropsWithChildren {
@@ -165,4 +179,5 @@ interface CellProps extends PropsWithChildren {
   isSelected: boolean;
   onClick: () => void;
   isEditable: boolean;
+  value?: number | null;
 }

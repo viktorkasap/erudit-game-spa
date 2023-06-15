@@ -19,5 +19,5 @@ export const { addPlayerMove, removePlayerMove, clearAllPlayerMoves } = createAp
 });
 
 $playerMoves.watch((state) => {
-  log('[$playerTurnMoves]', state);
+  log('[$playerMoves]', state);
 });

@@ -8,7 +8,7 @@ import { $playerMoves, removePlayerMove, addPlayerMove } from 'entities/player';
 import { removeLetterFromPlayer, addLetterToPlayer } from 'entities/rack';
 import { $selectedRackTail, setSelectedTail } from 'entities/tail';
 
-import { log } from 'shared/lib';
+import { letters } from 'shared/lib/game';
 
 export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
   const selectedTail = useStore($selectedRackTail);
@@ -45,6 +45,7 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
 
   return (
     <CellComponent
+      value={letters[String(children)]?.value}
       isEmpty={isEmpty}
       indexRow={indexRow}
       indexCell={indexCell}

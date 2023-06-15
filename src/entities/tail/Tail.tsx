@@ -1,13 +1,16 @@
 import { PropsWithChildren } from 'react';
 
-import { Box, createStyles } from '@mantine/core';
+import { Box, createStyles, Text } from '@mantine/core';
 
-export const Tail = ({ children, isSelected, onClick }: TailProps) => {
+export const Tail = ({ children, value, isSelected, onClick }: TailProps) => {
   const { classes, cx } = useStyles();
 
   return (
     <Box className={cx(classes.tail, { [classes.tailSelected]: isSelected })} onClick={onClick}>
       {children}
+      <Text className={classes.value} fz="xs" fw={100}>
+        {value}
+      </Text>
     </Box>
   );
 };
@@ -20,6 +23,7 @@ const useStyles = createStyles((theme) => ({
     textAlign: 'center',
     height: '3rem',
     width: '3rem',
+    position: 'relative',
     fontSize: theme.fontSizes.xl,
     textTransform: 'uppercase',
     fontWeight: 600,
@@ -43,9 +47,16 @@ const useStyles = createStyles((theme) => ({
       backgroundColor: theme.colors.dark[4],
     },
   },
+
+  value: {
+    position: 'absolute',
+    right: '4px',
+    bottom: 0,
+  },
 }));
 
 interface TailProps extends PropsWithChildren {
   onClick: () => void;
   isSelected: boolean;
+  value: number;
 }

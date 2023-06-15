@@ -10,50 +10,86 @@ type Board = Word[][];
 type PlayerMoves = Position[][];
 type HistoryWords = Word[];
 
+interface WordWithCoordinates {
+  word: string;
+  start: [number, number];
+  end: [number, number];
+  orphan: boolean;
+}
+
 const isWordInDictionary = (word: Word) => {
   return Object.prototype.hasOwnProperty.call(dictionary, word);
 };
 
-function getPlayerWord(playerMoves, board) {
-  // Сортируем ходы игрока по позиции на доске
-  const sortedMoves = Array.from(playerMoves).sort((a, b) => {
-    const [aRow, aCol] = a[0].split('-').map(Number);
-    const [bRow, bCol] = b[0].split('-').map(Number);
+const getVerticalWord = (board: Board, row: number, col: number): string => {
+  let startRow = row;
+  while (startRow > 0 && board[startRow - 1][col]) {
+    startRow--;
+  }
 
-    // Сначала сортируем по строкам, затем по столбцам
-    return aRow - bRow || aCol - bCol;
-  });
+  let endRow = row;
+  while (endRow < board.length - 1 && board[endRow + 1][col]) {
+    endRow++;
+  }
 
-  // Собираем буквы в слова
-  const words = [''];
-  let currentRow = null;
-  let currentCol = null;
-  for (const move of sortedMoves) {
-    const [position, letter] = move;
-    const [row, col] = position.split('-').map(Number);
+  let word = '';
+  for (let i = startRow; i <= endRow; i++) {
+    word += board[i][col];
+  }
 
-    // Если на доске уже есть буква на этой позиции, используем ее
-    // В противном случае используем букву из хода игрока
-    const currentLetter = board[row][col] || letter;
+  return word;
+};
 
-    // Если это первая буква или она находится в той же строке или столбце, что и предыдущая,
-    // добавляем ее к текущему слову
-    if (currentRow === null || currentCol === null || currentRow === row || currentCol === col) {
-      words[words.length - 1] += currentLetter;
-    } else {
-      // Если это буква из нового слова, начинаем новое слово
-      words.push(currentLetter);
+const getHorizontalWord = (board: Board, row: number, col: number): string => {
+  let startCol = col;
+  while (startCol > 0 && board[row][startCol - 1]) {
+    startCol--;
+  }
+
+  let endCol = col;
+  while (endCol < board[0].length - 1 && board[row][endCol + 1]) {
+    endCol++;
+  }
+
+  let word = '';
+  for (let i = startCol; i <= endCol; i++) {
+    word += board[row][i];
+  }
+
+  return word;
+};
+
+const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[] => {
+  const words: WordWithCoordinates[] = [];
+
+  for (const [row, col] of playerMoves) {
+    const verticalWord = getVerticalWord(board, row, col);
+    const horizontalWord = getHorizontalWord(board, row, col);
+
+    if (verticalWord === horizontalWord) {
+      const startCol = col - horizontalWord.indexOf(board[row][col]);
+      const endCol = startCol + horizontalWord.length - 1;
+      words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: true });
     }
 
-    currentRow = row;
-    currentCol = col;
+    if (verticalWord.length > 1) {
+      const startRow = row - verticalWord.indexOf(board[row][col]);
+      const endRow = startRow + verticalWord.length - 1;
+      words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false });
+    }
+
+    if (horizontalWord.length > 1) {
+      const startCol = col - horizontalWord.indexOf(board[row][col]);
+      const endCol = startCol + horizontalWord.length - 1;
+      words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false });
+    }
   }
 
   return words;
-}
+};
 
 export const checkMove = ({ board, historyWords, playerMoves }) => {
-  const word = getPlayerWord(playerMoves, board);
+  const word = getWords(board, playerMoves);
 
   log('[word]', word);
 
