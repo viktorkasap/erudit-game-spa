@@ -4,10 +4,10 @@ import dictionary from 'shared/assets/dict/ru/words.json';
 import { log } from 'shared/lib';
 
 type Word = string;
-type Position = number;
+type Cord = number;
 
 type Board = Word[][];
-type PlayerMoves = Position[][];
+type PlayerMoves = Cord[][];
 type HistoryWords = Word[];
 
 interface WordWithCoordinates {
@@ -16,6 +16,15 @@ interface WordWithCoordinates {
   end: [number, number];
   orphan: boolean;
 }
+
+interface ValidMoveReturnProps {
+  validWords: Array<Word>;
+  invalidWords: Array<Word>;
+  existingWords: Array<Word>;
+  duplicatedWords: Array<Word>;
+  nonIntersectingWords: Array<Word>;
+}
+
 const isWordInDictionary = (word: Word) => {
   return Object.prototype.hasOwnProperty.call(dictionary, word);
 };
@@ -61,7 +70,7 @@ const getHorizontalWord = (board: Board, row: number, col: number): string => {
 const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[] => {
   const words: WordWithCoordinates[] = [];
 
-  playerMoves.forEach(([row, col], index) => {
+  for (const [row, col] of playerMoves) {
     const verticalWord = getVerticalWord(board, row, col);
     const horizontalWord = getHorizontalWord(board, row, col);
 
@@ -72,47 +81,19 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
     }
 
     if (verticalWord.length > 1) {
-      const startRow = row - index;
+      const startRow = row - verticalWord.indexOf(board[row][col]);
       const endRow = startRow + verticalWord.length - 1;
       words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false });
     }
 
     if (horizontalWord.length > 1) {
-      const startCol = col - index;
+      const startCol = col - horizontalWord.indexOf(board[row][col]);
       const endCol = startCol + horizontalWord.length - 1;
-
-      log('--->', col, col - index, '|', startCol, endCol, '|', board[row][col], index);
-
       words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false });
     }
-  });
+  }
 
-  // for (const [row, col] of playerMoves) {
-  //   const verticalWord = getVerticalWord(board, row, col);
-  //   const horizontalWord = getHorizontalWord(board, row, col);
-  //
-  //   if (verticalWord === horizontalWord) {
-  //     const startCol = col - horizontalWord.indexOf(board[row][col]);
-  //     const endCol = startCol + horizontalWord.length - 1;
-  //     words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: true });
-  //   }
-  //
-  //   if (verticalWord.length > 1) {
-  //     const startRow = row - verticalWord.indexOf(board[row][col]);
-  //     const endRow = startRow + verticalWord.length - 1;
-  //     words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false });
-  //   }
-  //
-  //   if (horizontalWord.length > 1) {
-  //     const startCol = col - horizontalWord.indexOf(board[row][col]);
-  //     const endCol = startCol + horizontalWord.length - 1;
-  //
-  //     log('--->', row, col, startCol, endCol, board[row][col], col + horizontalWord.length - 1);
-  //
-  //     words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false });
-  //   }
-  // }
-
+  // return uniqWith(words, isEqual);
   return words;
 };
 
@@ -177,18 +158,8 @@ const checkDictionaryWords = (words: Word[]): Word[] => {
   return errorWords;
 };
 
-export const checkMove = ({
-  board,
-  historyWords,
-  playerMoves,
-}: {
-  board: Board;
-  historyWords: HistoryWords;
-  playerMoves: Map<string, string>;
-}) => {
-  const playerMovesArray = Array.from(playerMoves.keys()).map((key) => key.split('-').map(Number));
-
-  const words = getWords(board, playerMovesArray);
+export const validMove = ({ board, historyWords, playerMoves }: { board: Board; historyWords: HistoryWords; playerMoves: PlayerMoves }) => {
+  const words = getWords(board, playerMoves);
   // const isIntersection = checkIntersection(board, words);
   // const validDictionaryWords = checkDictionaryWords(words.map((collection) => collection.word));
   // const doubleWords = checkDoubleWords(words, historyWords);
@@ -209,11 +180,3 @@ export const checkMove = ({
 
   return {};
 };
-
-// const foo = [
-//   { word: 'ротор', start: [12, 5], end: [12, 9] },
-//   { word: 'ротор', start: [12, 5], end: [12, 9] },
-//   { word: 'ротор', start: [12, 5], end: [12, 9] },
-//   { word: 'ротор', start: [12, 11], end: [12, 7] },
-//   { word: 'ротор', start: [12, 13], end: [12, 9] },
-// ];

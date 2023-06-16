@@ -20,5 +20,5 @@ export const { setCell, setEmptyCell } = createApi($board, {
 });
 
 $board.watch((state) => {
-  log('[board]', state);
+  // log('[board]', state);
 });

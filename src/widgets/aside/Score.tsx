@@ -19,9 +19,7 @@ export const Score = () => {
   const history = useStore($history);
   const historyWords = Object.values(history).flat();
 
-  const playerMovesArray = Array.from(playerMoves.keys()).map((key) => key.split('-').map(Number));
-
-  const validMove = checkMove({ board, historyWords, playerMoves: playerMovesArray });
+  const validMove = checkMove({ board, historyWords, playerMoves });
 
   log('VALIDMOVE', validMove);
 

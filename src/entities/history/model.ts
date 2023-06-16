@@ -22,5 +22,5 @@ export const { addWordToHistory } = createApi($history, {
 });
 
 $history.watch((state) => {
-  log('[$history]', state);
+  // log('[$history]', state);
 });

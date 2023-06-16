@@ -9,5 +9,5 @@ export const { setSelectedTail } = createApi($selectedRackTail, {
 });
 
 $selectedRackTail.watch((state) => {
-  log('[Rack Tail]', state);
+  // log('[Rack Tail]', state);
 });
