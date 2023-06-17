@@ -7,7 +7,7 @@ import { addWordToHistory } from 'entities/history';
 import { removeLetter } from 'entities/letterBag';
 import { $turn, setNextPlayer } from 'entities/turn';
 
-import dictionary from 'shared/assets/dict/ru/words.json';
+import dictionary from 'shared/assets/dict/ru1/words.json';
 import { log } from 'shared/lib';
 
 import { Row } from './Row';

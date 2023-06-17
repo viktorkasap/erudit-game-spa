@@ -1,6 +1,8 @@
 import { isEqual, uniqWith } from 'lodash';
 
-import dictionary from 'shared/assets/dict/ru/words.json';
+import { $gaddag } from 'entities/gaddag';
+
+import dictionary from 'shared/assets/dict/ru1/words.json';
 import { log } from 'shared/lib';
 
 type Word = string;
@@ -16,9 +18,6 @@ interface WordWithCoordinates {
   end: [number, number];
   orphan: boolean;
 }
-const isWordInDictionary = (word: Word) => {
-  return Object.prototype.hasOwnProperty.call(dictionary, word);
-};
 
 const getVerticalWord = (board: Board, row: number, col: number): string => {
   let startRow = row;
@@ -61,6 +60,8 @@ const getHorizontalWord = (board: Board, row: number, col: number): string => {
 const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[] => {
   const words: WordWithCoordinates[] = [];
 
+  const processedWords = new Map();
+
   playerMoves.forEach(([row, col]) => {
     const verticalWord = getVerticalWord(board, row, col);
     const horizontalWord = getHorizontalWord(board, row, col);
@@ -71,52 +72,32 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
       words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: true });
     }
 
-    if (verticalWord.length > 1) {
-      const startRow = row - verticalWord.indexOf(board[row][col]);
-      const endRow = startRow + verticalWord.length - 1;
-      words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false });
+    for (let i = 0; i < verticalWord.length; i++) {
+      if (verticalWord.length > 1 && (!board[row - 1 + i] || !board[row - 1 + i][col])) {
+        const startRow = row + i;
+        const endRow = startRow + verticalWord.length - 1;
+        const wordKey = `${verticalWord}-${startRow}-${col}`;
+        if (!processedWords.has(wordKey)) {
+          words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false });
+          processedWords.set(wordKey, true);
+        }
+      }
     }
 
-    if (horizontalWord.length > 1) {
-      const startCol = col - horizontalWord.indexOf(board[row][col]);
-      const endCol = startCol + horizontalWord.length - 1;
-
-      words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false });
+    for (let i = 0; i < horizontalWord.length; i++) {
+      if (horizontalWord.length > 1 && !board[row][col - 1 + i]) {
+        const startCol = col + i;
+        const endCol = startCol + horizontalWord.length - 1;
+        const wordKey = `${horizontalWord}-${row}-${startCol}`;
+        if (!processedWords.has(wordKey)) {
+          words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false });
+          processedWords.set(wordKey, true);
+        }
+      }
     }
   });
 
-  const filteredWords = words.reduce((acc: WordWithCoordinates[], current) => {
-    const find = acc.find((w) => {
-      const start1 = w.start.join('');
-      const end1 = w.end.join('');
-
-      const start2 = current.start.join('');
-      const end2 = current.end.join('');
-
-      if (
-        (current.word === w.word && Number(start1) < Number(start2) && Number(end1) > Number(start2)) ||
-        start1 === start2 ||
-        end1 === end2 ||
-        end1 === start2 ||
-        start1 === end2
-      ) {
-        return w;
-      }
-
-      return false;
-    });
-
-    if (!find) {
-      acc.push(current);
-    }
-
-    return acc;
-  }, []);
-
-  log('filtered', filteredWords);
-
-  return filteredWords;
-  // return words;
+  return words;
 };
 
 const checkIntersection = (board: Board, wordsWithCoordinates: WordWithCoordinates[]) => {
@@ -167,6 +148,10 @@ const checkDoubleWords = (words: WordWithCoordinates[], historyWords: HistoryWor
   return doubleWords;
 };
 
+const isWordInDictionary = (word: Word) => {
+  return Object.prototype.hasOwnProperty.call(dictionary, word);
+};
+
 const checkDictionaryWords = (words: Word[]): Word[] => {
   const errorWords = [];
 
@@ -191,32 +176,7 @@ export const checkMove = ({
 }) => {
   const playerMovesArray = Array.from(playerMoves.keys()).map((key) => key.split('-').map(Number));
 
-  const words = getWords(board, playerMovesArray);
-  // const isIntersection = checkIntersection(board, words);
-  // const validDictionaryWords = checkDictionaryWords(words.map((collection) => collection.word));
-  // const doubleWords = checkDoubleWords(words, historyWords);
-
-  // log('[historyWords]', historyWords);
-  log('[words]', words);
-  // log('[isIntersection]', isIntersection);
-  // log('[validDictionaryWords]', validDictionaryWords);
-  // log('[doubleWords]', doubleWords);
-
-  // if (!isIntersection) {
-  //   return { error: 'Нет пересечений с другими словами' };
-  // }
-  //
-  // if (validDictionaryWords.length) {
-  //   return { error: `Слов '${validDictionaryWords.join(', ')}' нет слова в словаре` };
-  // }
+  log('[$gaddag]', $gaddag.getState());
 
   return {};
 };
-
-// const foo = [
-//   { word: 'ротор', start: [12, 5], end: [12, 9] },
-//   { word: 'ротор', start: [12, 5], end: [12, 9] },
-//   { word: 'ротор', start: [12, 5], end: [12, 9] },
-//   { word: 'ротор', start: [12, 11], end: [12, 7] },
-//   { word: 'ротор', start: [12, 13], end: [12, 9] },
-// ];
