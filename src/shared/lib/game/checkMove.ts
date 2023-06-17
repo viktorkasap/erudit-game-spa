@@ -61,7 +61,7 @@ const getHorizontalWord = (board: Board, row: number, col: number): string => {
 const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[] => {
   const words: WordWithCoordinates[] = [];
 
-  playerMoves.forEach(([row, col], index) => {
+  playerMoves.forEach(([row, col]) => {
     const verticalWord = getVerticalWord(board, row, col);
     const horizontalWord = getHorizontalWord(board, row, col);
 
@@ -72,48 +72,51 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
     }
 
     if (verticalWord.length > 1) {
-      const startRow = row - index;
+      const startRow = row - verticalWord.indexOf(board[row][col]);
       const endRow = startRow + verticalWord.length - 1;
       words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false });
     }
 
     if (horizontalWord.length > 1) {
-      const startCol = col - index;
+      const startCol = col - horizontalWord.indexOf(board[row][col]);
       const endCol = startCol + horizontalWord.length - 1;
-
-      log('--->', col, col - index, '|', startCol, endCol, '|', board[row][col], index);
 
       words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false });
     }
   });
 
-  // for (const [row, col] of playerMoves) {
-  //   const verticalWord = getVerticalWord(board, row, col);
-  //   const horizontalWord = getHorizontalWord(board, row, col);
-  //
-  //   if (verticalWord === horizontalWord) {
-  //     const startCol = col - horizontalWord.indexOf(board[row][col]);
-  //     const endCol = startCol + horizontalWord.length - 1;
-  //     words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: true });
-  //   }
-  //
-  //   if (verticalWord.length > 1) {
-  //     const startRow = row - verticalWord.indexOf(board[row][col]);
-  //     const endRow = startRow + verticalWord.length - 1;
-  //     words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false });
-  //   }
-  //
-  //   if (horizontalWord.length > 1) {
-  //     const startCol = col - horizontalWord.indexOf(board[row][col]);
-  //     const endCol = startCol + horizontalWord.length - 1;
-  //
-  //     log('--->', row, col, startCol, endCol, board[row][col], col + horizontalWord.length - 1);
-  //
-  //     words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false });
-  //   }
-  // }
+  const filteredWords = words.reduce((acc: WordWithCoordinates[], current) => {
+    const find = acc.find((w) => {
+      const start1 = w.start.join('');
+      const end1 = w.end.join('');
 
-  return words;
+      const start2 = current.start.join('');
+      const end2 = current.end.join('');
+
+      if (
+        (current.word === w.word && Number(start1) < Number(start2) && Number(end1) > Number(start2)) ||
+        start1 === start2 ||
+        end1 === end2 ||
+        end1 === start2 ||
+        start1 === end2
+      ) {
+        return w;
+      }
+
+      return false;
+    });
+
+    if (!find) {
+      acc.push(current);
+    }
+
+    return acc;
+  }, []);
+
+  log('filtered', filteredWords);
+
+  return filteredWords;
+  // return words;
 };
 
 const checkIntersection = (board: Board, wordsWithCoordinates: WordWithCoordinates[]) => {
