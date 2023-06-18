@@ -205,6 +205,7 @@ export const checkMove = ({
   const doubleWords = checkDoubleWords(words, historyWords);
 
   log('[words]', JSON.stringify(words));
+  log('[words]', words);
   log('[isIntersection]', isIntersection);
   log('[validDictionaryWords]', validDictionaryWords);
   log('[doubleWords]', JSON.stringify(doubleWords));
