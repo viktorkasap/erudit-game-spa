@@ -99,6 +99,10 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
 };
 
 const checkIntersection = (board: Board, playerMoves: PlayerMoves) => {
+  if (!playerMoves.length) {
+    return true;
+  }
+
   // Проверяем, что хотя бы одна буква каждого нового слова смежна с уже существующим словом
   return playerMoves.some(([row, col]) => {
     // Проверяем все соседние клетки
