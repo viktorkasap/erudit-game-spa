@@ -22,9 +22,12 @@ export const Tails = () => {
     }
 
     if (letters) {
-      'селение'.split('').forEach((letter) => {
+      'роторсн'.split('').forEach((letter) => {
         addLetterToPlayer(letter);
       });
+      // 'селение'.split('').forEach((letter) => {
+      //   addLetterToPlayer(letter);
+      // });
 
       // original
       // letters?.forEach((letter) => {

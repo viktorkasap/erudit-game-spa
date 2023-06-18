@@ -2,7 +2,7 @@ import { createStore } from 'effector';
 
 import dictionary from 'shared/assets/dict/ru1/words.json';
 
-interface GaddagNode {
+export interface GaddagNode {
   [key: string]: GaddagNode;
 }
 

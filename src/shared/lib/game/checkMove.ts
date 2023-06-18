@@ -1,6 +1,4 @@
-import { isEqual, uniqWith } from 'lodash';
-
-import { $gaddag } from 'entities/gaddag';
+import _ from 'lodash';
 
 import dictionary from 'shared/assets/dict/ru1/words.json';
 import { log } from 'shared/lib';
@@ -17,6 +15,7 @@ interface WordWithCoordinates {
   start: [number, number];
   end: [number, number];
   orphan: boolean;
+  direction: string;
 }
 
 const getVerticalWord = (board: Board, row: number, col: number): string => {
@@ -60,40 +59,28 @@ const getHorizontalWord = (board: Board, row: number, col: number): string => {
 const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[] => {
   const words: WordWithCoordinates[] = [];
 
-  const processedWords = new Map();
+  // Сначала получим все уникальные строки и столбцы из ходов игрока
+  const uniqueRows = [...new Set(playerMoves.map(([row, _]) => row))];
+  const uniqueCols = [...new Set(playerMoves.map(([_, col]) => col))];
 
-  playerMoves.forEach(([row, col]) => {
-    const verticalWord = getVerticalWord(board, row, col);
-    const horizontalWord = getHorizontalWord(board, row, col);
-
-    if (verticalWord === horizontalWord) {
-      const startCol = col - horizontalWord.indexOf(board[row][col]);
+  // Затем для каждой уникальной строки и столбца получим слова
+  uniqueRows.forEach((row) => {
+    const horizontalWord = getHorizontalWord(board, row, Math.min(...playerMoves.filter(([r, _]) => r === row).map(([_, col]) => col)));
+    if (horizontalWord.length > 1) {
+      const startCol = Math.min(...playerMoves.filter(([r, _]) => r === row).map(([_, col]) => col));
       const endCol = startCol + horizontalWord.length - 1;
-      words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: true });
+      const wordCoordinates = { word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false, direction: 'horizontal' };
+      words.push(wordCoordinates);
     }
+  });
 
-    for (let i = 0; i < verticalWord.length; i++) {
-      if (verticalWord.length > 1 && (!board[row - 1 + i] || !board[row - 1 + i][col])) {
-        const startRow = row + i;
-        const endRow = startRow + verticalWord.length - 1;
-        const wordKey = `${verticalWord}-${startRow}-${col}`;
-        if (!processedWords.has(wordKey)) {
-          words.push({ word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false });
-          processedWords.set(wordKey, true);
-        }
-      }
-    }
-
-    for (let i = 0; i < horizontalWord.length; i++) {
-      if (horizontalWord.length > 1 && !board[row][col - 1 + i]) {
-        const startCol = col + i;
-        const endCol = startCol + horizontalWord.length - 1;
-        const wordKey = `${horizontalWord}-${row}-${startCol}`;
-        if (!processedWords.has(wordKey)) {
-          words.push({ word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false });
-          processedWords.set(wordKey, true);
-        }
-      }
+  uniqueCols.forEach((col) => {
+    const verticalWord = getVerticalWord(board, Math.min(...playerMoves.filter(([_, c]) => c === col).map(([row, _]) => row)), col);
+    if (verticalWord.length > 1) {
+      const startRow = Math.min(...playerMoves.filter(([_, c]) => c === col).map(([row, _]) => row));
+      const endRow = startRow + verticalWord.length - 1;
+      const wordCoordinates = { word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false, direction: 'vertical' };
+      words.push(wordCoordinates);
     }
   });
 
@@ -102,21 +89,21 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
 
 const checkIntersection = (board: Board, wordsWithCoordinates: WordWithCoordinates[]) => {
   // Проверяем, что хотя бы одна буква каждого нового слова смежна с уже существующим словом
-  return wordsWithCoordinates.every(({ start, end }) => {
+  return wordsWithCoordinates.some(({ start, end, direction }) => {
     const [startRow, startCol] = start;
     const [endRow, endCol] = end;
 
-    if (startRow === endRow) {
+    if (direction === 'horizontal') {
       // Это горизонтальное слово
       for (let col = startCol; col <= endCol; col++) {
-        if (board[startRow - 1]?.[col] || board[startRow + 1]?.[col]) {
+        if (board[startRow - 1]?.[col] || board[startRow + 1]?.[col] || board[startRow][col - 1] || board[startRow][col + 1]) {
           return true;
         }
       }
     } else {
       // Это вертикальное слово
       for (let row = startRow; row <= endRow; row++) {
-        if (board[row]?.[startCol - 1] || board[row]?.[startCol + 1]) {
+        if (board[row]?.[startCol - 1] || board[row]?.[startCol + 1] || board[row - 1]?.[startCol] || board[row + 1]?.[startCol]) {
           return true;
         }
       }
@@ -124,28 +111,6 @@ const checkIntersection = (board: Board, wordsWithCoordinates: WordWithCoordinat
 
     return false;
   });
-};
-
-const checkDoubleWords = (words: WordWithCoordinates[], historyWords: HistoryWords) => {
-  const doubleWords: { word: string; count: number }[] = [];
-  const countWords: Record<string, number> = {};
-  const wordsArray = words.map(({ word }) => word);
-
-  [...historyWords, ...wordsArray].forEach((word) => {
-    if (!countWords[word]) {
-      countWords[word] = 1;
-    } else {
-      countWords[word] = countWords[word] + 1;
-    }
-  });
-
-  Object.entries(countWords).forEach(([word, count]) => {
-    if (count > 1) {
-      doubleWords.push({ word, count });
-    }
-  });
-
-  return doubleWords;
 };
 
 const isWordInDictionary = (word: Word) => {
@@ -165,6 +130,35 @@ const checkDictionaryWords = (words: Word[]): Word[] => {
   return errorWords;
 };
 
+const checkDoubleWords = (words: WordWithCoordinates[], historyWords: HistoryWords) => {
+  const doubleWords: { word: string; count: number }[] = [];
+  const countWords: Record<string, number> = {};
+
+  words.forEach(({ word }) => {
+    if (!countWords[word]) {
+      countWords[word] = 1;
+    } else {
+      countWords[word] = countWords[word] + 1;
+    }
+  });
+
+  historyWords.forEach((word) => {
+    if (!countWords[word]) {
+      countWords[word] = 1;
+    } else {
+      countWords[word] = countWords[word] + 1;
+    }
+  });
+
+  Object.entries(countWords).forEach(([word, count]) => {
+    if (count > 1) {
+      doubleWords.push({ word, count });
+    }
+  });
+
+  return doubleWords;
+};
+
 export const checkMove = ({
   board,
   historyWords,
@@ -176,7 +170,28 @@ export const checkMove = ({
 }) => {
   const playerMovesArray = Array.from(playerMoves.keys()).map((key) => key.split('-').map(Number));
 
-  log('[$gaddag]', $gaddag.getState());
+  const words = getWords(board, playerMovesArray);
+  const isIntersection = checkIntersection(board, words);
+  const validDictionaryWords = checkDictionaryWords(words.map((collection) => collection.word));
+  const doubleWords = checkDoubleWords(words, historyWords);
+
+  log('[words]', JSON.stringify(words));
+  log('[isIntersection]', isIntersection);
+  log('[validDictionaryWords]', validDictionaryWords);
+  log('[doubleWords]', JSON.stringify(doubleWords));
+  log('[moves]', JSON.stringify(playerMovesArray));
+
+  if (!isIntersection) {
+    return { error: 'Нет пересечений с другими словами' };
+  }
+
+  if (validDictionaryWords.length) {
+    return { error: `Слов '${validDictionaryWords.join(', ')}' нет слова в словаре` };
+  }
+
+  if (doubleWords.length) {
+    return { error: `Слово(а) '${doubleWords.map((w) => w.word).join(', ')}' уже были использованы` };
+  }
 
   return {};
 };
