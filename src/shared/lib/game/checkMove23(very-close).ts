@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 import dictionary from 'shared/assets/dict/ru1/words.json';
 import { log } from 'shared/lib';
 
@@ -17,9 +19,6 @@ interface WordWithCoordinates {
   orphan: boolean;
   direction: string;
 }
-const isWordInDictionary = (word: Word) => {
-  return Object.prototype.hasOwnProperty.call(dictionary, word);
-};
 
 const getVerticalWord = (board: Board, row: number, col: number): string => {
   let startRow = row;

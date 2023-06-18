@@ -1,5 +1,3 @@
-import _ from 'lodash';
-
 import dictionary from 'shared/assets/dict/ru1/words.json';
 import { log } from 'shared/lib';
 
@@ -60,6 +58,7 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
   const words: WordWithCoordinates[] = [];
 
   // Сначала получим все уникальные строки и столбцы из ходов игрока
+  // eslint-disable-next-line no-unused-vars
   const uniqueRows = [...new Set(playerMoves.map(([row, _]) => row))];
   const uniqueCols = [...new Set(playerMoves.map(([_, col]) => col))];
 
@@ -69,7 +68,13 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
     if (horizontalWord.length > 1) {
       const startCol = Math.min(...playerMoves.filter(([r, _]) => r === row).map(([_, col]) => col));
       const endCol = startCol + horizontalWord.length - 1;
-      const wordCoordinates = { word: horizontalWord, start: [row, startCol], end: [row, endCol], orphan: false, direction: 'horizontal' };
+      const wordCoordinates: WordWithCoordinates = {
+        word: horizontalWord,
+        start: [row, startCol],
+        end: [row, endCol],
+        orphan: false,
+        direction: 'horizontal',
+      };
       words.push(wordCoordinates);
     }
   });
@@ -79,7 +84,13 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
     if (verticalWord.length > 1) {
       const startRow = Math.min(...playerMoves.filter(([_, c]) => c === col).map(([row, _]) => row));
       const endRow = startRow + verticalWord.length - 1;
-      const wordCoordinates = { word: verticalWord, start: [startRow, col], end: [endRow, col], orphan: false, direction: 'vertical' };
+      const wordCoordinates: WordWithCoordinates = {
+        word: verticalWord,
+        start: [startRow, col],
+        end: [endRow, col],
+        orphan: false,
+        direction: 'vertical',
+      };
       words.push(wordCoordinates);
     }
   });
@@ -87,29 +98,43 @@ const getWords = (board: Board, playerMoves: PlayerMoves): WordWithCoordinates[]
   return words;
 };
 
-const checkIntersection = (board: Board, wordsWithCoordinates: WordWithCoordinates[]) => {
+const checkIntersection = (board: Board, playerMoves: PlayerMoves) => {
   // Проверяем, что хотя бы одна буква каждого нового слова смежна с уже существующим словом
-  return wordsWithCoordinates.some(({ start, end, direction }) => {
-    const [startRow, startCol] = start;
-    const [endRow, endCol] = end;
+  return playerMoves.some(([row, col]) => {
+    // Проверяем все соседние клетки
+    const adjacentCells = [
+      [row - 1, col],
+      [row + 1, col],
+      [row, col - 1],
+      [row, col + 1],
+    ];
 
-    if (direction === 'horizontal') {
-      // Это горизонтальное слово
-      for (let col = startCol; col <= endCol; col++) {
-        if (board[startRow - 1]?.[col] || board[startRow + 1]?.[col] || board[startRow][col - 1] || board[startRow][col + 1]) {
-          return true;
-        }
+    // Проверяем, является ли каждая соседняя клетка частью уже существующего слова
+    return adjacentCells.some(([adjRow, adjCol]) => {
+      // Если соседняя клетка не пуста и она не является частью нового слова, то есть пересечение
+      if (board[adjRow]?.[adjCol] && !playerMoves.some(([moveRow, moveCol]) => moveRow === adjRow && moveCol === adjCol)) {
+        return true;
       }
-    } else {
-      // Это вертикальное слово
-      for (let row = startRow; row <= endRow; row++) {
-        if (board[row]?.[startCol - 1] || board[row]?.[startCol + 1] || board[row - 1]?.[startCol] || board[row + 1]?.[startCol]) {
-          return true;
-        }
-      }
-    }
 
-    return false;
+      // Если соседняя клетка является частью нового слова, проверяем, пересекает ли она уже существующее слово
+      if (playerMoves.some(([moveRow, moveCol]) => moveRow === adjRow && moveCol === adjCol)) {
+        const secondAdjacentCells = [
+          [adjRow - 1, adjCol],
+          [adjRow + 1, adjCol],
+          [adjRow, adjCol - 1],
+          [adjRow, adjCol + 1],
+        ];
+
+        return secondAdjacentCells.some(([secondAdjRow, secondAdjCol]) => {
+          return (
+            board[secondAdjRow]?.[secondAdjCol] &&
+            !playerMoves.some(([moveRow, moveCol]) => moveRow === secondAdjRow && moveCol === secondAdjCol)
+          );
+        });
+      }
+
+      return false;
+    });
   });
 };
 
@@ -171,7 +196,7 @@ export const checkMove = ({
   const playerMovesArray = Array.from(playerMoves.keys()).map((key) => key.split('-').map(Number));
 
   const words = getWords(board, playerMovesArray);
-  const isIntersection = checkIntersection(board, words);
+  const isIntersection = checkIntersection(board, playerMovesArray);
   const validDictionaryWords = checkDictionaryWords(words.map((collection) => collection.word));
   const doubleWords = checkDoubleWords(words, historyWords);
 

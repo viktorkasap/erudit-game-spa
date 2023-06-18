@@ -165,7 +165,8 @@
       {
         "vars": "all",
         "args": "after-used",
-        "varsIgnorePattern": "React"
+        "varsIgnorePattern": "React",
+        "argsIgnorePattern": "^_$" // ignore "_"
       }
     ],
     "max-len": [
