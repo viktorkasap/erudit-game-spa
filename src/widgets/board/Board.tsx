@@ -12,8 +12,6 @@ import { log } from 'shared/lib';
 
 import { Row } from './Row';
 
-// const apiKey = import.meta.env.VITE_YANDEX_DICT_API_KEY;
-
 const buildInitialWord = () => {
   const wordsArray = Object.keys(dictionary);
   const sevenLettersWords = wordsArray.filter((word) => word.length === 7);
