@@ -26,14 +26,13 @@
 ---
 ### Словарь
 - tiles - фишки
-- playerHand - буквы на руках
 - tileStack - мешок с буквами
 - drawTile - вытянуть букву
 - shuffle - перемешать
 - turn - ход
 - score - счет
-- rack - хранилище букв
-- bonus squares - бонусные клетки
+- rack - буквы на руках
+- bonus (squares) - бонусные клетки
 - dictionary - словарь
 - start - начать игру
 - end - конец игры

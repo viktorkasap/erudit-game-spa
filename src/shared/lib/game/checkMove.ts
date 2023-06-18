@@ -222,5 +222,7 @@ export const checkMove = ({
     return { error: `Слово(а) '${doubleWords.map((w) => w.word).join(', ')}' уже были использованы` };
   }
 
+  // TODO добавить возврат ошибок или данных ходов и слов
+
   return {};
 };
