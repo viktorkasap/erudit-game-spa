@@ -7,16 +7,15 @@ import { addWordToHistory } from 'entities/history';
 import { removeLetter } from 'entities/letterBag';
 import { $turn, setNextPlayer } from 'entities/turn';
 
+import dictionary from 'shared/assets/dict/ru1/words.json';
 import { log } from 'shared/lib';
-
-import words from '../../../public/dict/ru/russian_nouns.json';
 
 import { Row } from './Row';
 
 // const apiKey = import.meta.env.VITE_YANDEX_DICT_API_KEY;
 
 const buildInitialWord = () => {
-  const wordsArray = Object.keys(words);
+  const wordsArray = Object.keys(dictionary);
   const sevenLettersWords = wordsArray.filter((word) => word.length === 7);
 
   return sevenLettersWords[Math.floor(Math.random() * sevenLettersWords.length)];
@@ -31,16 +30,26 @@ const useStartGame = () => {
 
     log('firstWordArray', firstWordArray);
 
-    'обморок'.split('').forEach((letter) => {
+    'полоний'.split('').forEach((letter) => {
       setCell({ indexRow, indexCell, letter });
       indexCell += 1;
     });
+    addWordToHistory({ player: 'computer', word: 'полоний' });
 
-    addWordToHistory({ player: 'computer', word: 'обморок' });
+    // setCell({ indexRow: 8, indexCell: 4, letter: 'а' });
+    // setCell({ indexRow: 9, indexCell: 4, letter: 'к' });
+    // setCell({ indexRow: 10, indexCell: 4, letter: 'е' });
+    // setCell({ indexRow: 11, indexCell: 4, letter: 'т' });
+    // addWordToHistory({ player: 'player2', word: 'пакет' });
 
-    setCell({ indexRow: 6, indexCell: 4, letter: 'р' });
-    setCell({ indexRow: 8, indexCell: 4, letter: 'м' });
-    addWordToHistory({ player: 'player2', word: 'ром' });
+    setCell({ indexRow: 8, indexCell: 4, letter: 'о' });
+    setCell({ indexRow: 9, indexCell: 4, letter: 'т' });
+    addWordToHistory({ player: 'player2', word: 'пот' });
+
+    // setCell({ indexRow: 8, indexCell: 8, letter: 'о' });
+    // setCell({ indexRow: 9, indexCell: 8, letter: 'р' });
+    // setCell({ indexRow: 10, indexCell: 8, letter: 'а' });
+    // addWordToHistory({ player: 'player2', word: 'нора' });
 
     // original
     // firstWordArray.forEach((letter) => {

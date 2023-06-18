@@ -4,6 +4,19 @@
 - [x] Styles board/tails/words stack
 - [] DND https://dndkit.com
 
+----
+
+# Пример игры на гитхабе
+
+> 1) https://github.com/contragents/erudit.club
+> 2) https://github.com/Nikolai2038/erudite
+> 3) калькулятор хода https://github.com/tit/erudite/blob/master/public/javascript/calculator.js
+> 4) проверки https://github.com/Nikolai2038/erudite/blob/master/Erudite/Erudite/FormGame.cs
+> 5) слова https://github.com/RiordanFols/scrabble_assistant/blob/master/resources/dictionaries/word_rus.txt
+> 6) статья https://habr.com/ru/articles/191432/
+> 7) слова https://github.com/RiordanFols/scrabble_assistant/blob/master/resources/dictionaries/nouns.txt
+> 8) проверки https://github.com/RiordanFols/scrabble_assistant/blob/master/assistant/scrabble_assistant.py
+
 ---
 ### Refs
 > ICONS https://tabler-icons.io
@@ -13,14 +26,13 @@
 ---
 ### Словарь
 - tiles - фишки
-- playerHand - буквы на руках
 - tileStack - мешок с буквами
 - drawTile - вытянуть букву
 - shuffle - перемешать
 - turn - ход
 - score - счет
-- rack - хранилище букв
-- bonus squares - бонусные клетки
+- rack - буквы на руках
+- bonus (squares) - бонусные клетки
 - dictionary - словарь
 - start - начать игру
 - end - конец игры

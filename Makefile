@@ -50,9 +50,7 @@ preview: ## Run preview project
 start: ## Start the server with an optional port (e.g., make serve PORT=4040)
 	@echo "\n🚀 Starting server..."
 ifeq ($(PORT),)
-#	npx vite --host wms2.digitalbutlers.me --port 4000
-	npx vite --host ${LOCAL_HOST} --port 4001
+	npx vite --host ${LOCAL_HOST} --port $(DEFAULT_PORT)
 else
-#	npx vite --host wms2.digitalbutlers.me --port $(PORT)
 	npx vite --host ${LOCAL_HOST} --port $(PORT)
 endif

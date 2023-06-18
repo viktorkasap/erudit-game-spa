@@ -13,5 +13,5 @@ export const { shuffleRackTails, removeLetterFromPlayer, addLetterToPlayer } = c
 });
 
 $rackTails.watch((state) => {
-  log('[Rack Tails]', state);
+  // log('[Rack Tails]', state);
 });

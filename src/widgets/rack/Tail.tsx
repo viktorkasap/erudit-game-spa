@@ -6,6 +6,8 @@ import { addPlayerMove } from 'entities/player';
 import { removeLetterFromPlayer } from 'entities/rack';
 import { $selectedRackTail, setSelectedTail, Tail as TailComponent } from 'entities/tail';
 
+import { letters } from 'shared/lib/game';
+
 export const Tail = ({ index, tail }: TailProps) => {
   const selectedTail = useStore($selectedRackTail);
   const selectedCell = useStore($selectedCell);
@@ -15,7 +17,7 @@ export const Tail = ({ index, tail }: TailProps) => {
       removeLetterFromPlayer(index);
       setSelectedCell(null);
       setSelectedTail(null);
-      addPlayerMove(`${selectedCell.indexRow}-${selectedCell.indexCell}`);
+      addPlayerMove({ position: `${selectedCell.indexRow}-${selectedCell.indexCell}`, letter });
       setCell({ indexRow: selectedCell.indexRow, indexCell: selectedCell.indexCell, letter });
 
       return;
@@ -29,7 +31,10 @@ export const Tail = ({ index, tail }: TailProps) => {
   };
 
   return (
-    <TailComponent isSelected={selectedTail?.index === index} onClick={() => handleSelected({ index, letter: tail })}>
+    <TailComponent
+      value={letters[tail].value}
+      isSelected={selectedTail?.index === index}
+      onClick={() => handleSelected({ index, letter: tail })}>
       {tail}
     </TailComponent>
   );

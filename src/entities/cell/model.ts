@@ -9,5 +9,5 @@ export const { setSelectedCell } = createApi($selectedCell, {
 });
 
 $selectedCell.watch((state) => {
-  log('[$selectedCell]', state);
+  // log('[$selectedCell]', state);
 });
