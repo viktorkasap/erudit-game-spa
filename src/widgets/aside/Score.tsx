@@ -1,6 +1,7 @@
+import { IconFileInvoice } from '@tabler/icons-react';
 import { useStore } from 'effector-react';
 
-import { Box, Text, createStyles } from '@mantine/core';
+import { Box, Text, createStyles, Group } from '@mantine/core';
 
 import { $board } from 'entities/board';
 import { $history } from 'entities/history';
@@ -8,8 +9,6 @@ import { $playerMoves } from 'entities/player';
 
 import { log } from 'shared/lib';
 import { checkMove } from 'shared/lib/game';
-
-import { PlayerScore } from './PlayerScore';
 
 export const Score = () => {
   const { classes } = useStyles();
@@ -25,10 +24,14 @@ export const Score = () => {
 
   return (
     <Box className={classes.wrapper}>
-      <Text fw={600} fz="lg">
-        Score:
-      </Text>
-      <PlayerScore />
+      <Group position="left" spacing="4">
+        <IconFileInvoice size="1rem" stroke="2px" />
+        <Text fw={600} fz="lg">
+          Score:
+        </Text>
+      </Group>
+
+      <Text>0/0</Text>
     </Box>
   );
 };
