@@ -1,15 +1,33 @@
+import { useStore } from 'effector-react';
+
 import { Box, createStyles } from '@mantine/core';
 
+import { Player } from 'widgets/aside/Player';
+
+import { $game, GameStatus } from 'entities/game';
+
+import { EndGame } from './EndGame';
 import { Score } from './Score';
+import { StartGame } from './StartGame';
 
 export const Aside = () => {
   const { classes } = useStyles();
+  const game = useStore($game);
 
   return (
     <Box className={classes.wrapper}>
-      <Box className={classes.box}>
-        <Score />
-      </Box>
+      {GameStatus.Idle === game && <StartGame />}
+      {GameStatus.Process === game && (
+        <>
+          <EndGame />
+          <Box className={classes.box}>
+            <Player />
+          </Box>
+          <Box className={classes.box}>
+            <Score />
+          </Box>
+        </>
+      )}
     </Box>
   );
 };

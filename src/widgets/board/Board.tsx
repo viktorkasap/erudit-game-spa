@@ -65,21 +65,21 @@ const useStartGame = () => {
 
 export const Board = () => {
   const board = useStore($board);
-  const player = useStore($turn);
+  // const player = useStore($turn);
+  //
+  // const [firstWord, setFirstWord] = useState<string | null>(null);
+  // const startGame = useStartGame();
 
-  const [firstWord, setFirstWord] = useState<string | null>(null);
-  const startGame = useStartGame();
-
-  useEffect(() => {
-    if (!firstWord) {
-      setFirstWord(buildInitialWord());
-    }
-
-    if (firstWord && player === 'computer') {
-      log('[firstWord]', firstWord);
-      startGame(firstWord);
-    }
-  }, [firstWord, player, startGame]);
+  // useEffect(() => {
+  //   if (!firstWord) {
+  //     setFirstWord(buildInitialWord());
+  //   }
+  //
+  //   if (firstWord && player === 'computer') {
+  //     log('[firstWord]', firstWord);
+  //     startGame(firstWord);
+  //   }
+  // }, [firstWord, player, startGame]);
 
   return (
     <BoardComponent>
