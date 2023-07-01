@@ -1,7 +1,7 @@
-import { IconFileInvoice } from '@tabler/icons-react';
+import { IconFileInvoice, IconPlayerSkipForwardFilled } from '@tabler/icons-react';
 import { useStore } from 'effector-react';
 
-import { Box, Text, createStyles, Group } from '@mantine/core';
+import { Box, Text, createStyles, Group, Button } from '@mantine/core';
 
 import { $board } from 'entities/board';
 import { $history } from 'entities/history';
@@ -13,14 +13,13 @@ import { checkMove } from 'shared/lib/game';
 export const Score = () => {
   const { classes } = useStyles();
 
-  const board = useStore($board);
-  const playerMoves = useStore($playerMoves);
-  const history = useStore($history);
-  const historyWords = Object.values(history).flat();
-
-  const validMove = checkMove({ board, historyWords, playerMoves });
-
-  log('VALIDMOVE', validMove);
+  // const board = useStore($board);
+  // const playerMoves = useStore($playerMoves);
+  // const history = useStore($history);
+  // const historyWords = Object.values(history).flat();
+  //
+  // const validMove = checkMove({ board, historyWords, playerMoves });
+  // log('VALIDMOVE', validMove);
 
   return (
     <Box className={classes.wrapper}>
@@ -30,6 +29,8 @@ export const Score = () => {
           Score:
         </Text>
       </Group>
+
+      <Button rightIcon={<IconPlayerSkipForwardFilled size="0.75rem" />}>Skip</Button>
 
       <Text>0/0</Text>
     </Box>

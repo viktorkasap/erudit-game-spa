@@ -35,7 +35,7 @@ const initialState = {
   players: [Player.Player1, Player.Player2] as GamePlayer[],
 };
 
-export const $game = createStore<GameProps>(initialState);
+export const $game = createStore<GameProps>(initialState); // todo под вопросом --- {} as GameProps
 
 export const { startGame, endGame, nextPlayer } = createApi($game, {
   startGame: (state, { countPlayers, players }: { countPlayers: CountPlayers; players: GamePlayer[] }) => ({
@@ -44,14 +44,16 @@ export const { startGame, endGame, nextPlayer } = createApi($game, {
     turn: Player.Computer,
     status: GameStatus.Process,
   }),
-  endGame: () => initialState,
   nextPlayer: (state) => {
-    const { players } = state;
-    const currentIndex = players.indexOf(state.turn as GamePlayer);
-    const nextIndex = (currentIndex + 1) % players.length;
+    if (state.players) {
+      const { players } = state;
+      const currentIndex = players.indexOf(state.turn as GamePlayer);
+      const nextIndex = (currentIndex + 1) % players.length;
 
-    return { ...state, turn: players[nextIndex] };
+      return { ...state, turn: players[nextIndex] };
+    }
   },
+  endGame: () => initialState,
 });
 
 $game.watch((state) => {
