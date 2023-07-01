@@ -3,6 +3,7 @@ import { createApi, createStore } from 'effector';
 
 import { log } from 'shared/lib';
 
+export type CountPlayers = 2 | 3 | 4;
 export enum GameStatus {
   Idle,
   Process,
@@ -18,28 +19,35 @@ export enum Player {
   Player4 = 'player4',
 }
 
-export type CountPlayers = 2 | 3 | 4;
+export type GamePlayer = Player.Player1 | Player.Player2 | Player.Player3 | Player.Player4;
 
-interface GameStoreProps {
-  status: GameStatus;
-  countPlayers: CountPlayers;
+interface GameProps {
   turn: Player;
+  status: GameStatus;
+  players: GamePlayer[];
+  countPlayers: CountPlayers;
 }
 
-export const $game = createStore<GameStoreProps>({ status: GameStatus.Idle, countPlayers: 2, turn: Player.Idle });
-
-const playersOrder = {
-  2: [Player.Player1, Player.Player2],
-  3: [Player.Player1, Player.Player2, Player.Player3],
-  4: [Player.Player1, Player.Player2, Player.Player3, Player.Player4],
+const initialState = {
+  turn: Player.Idle,
+  status: GameStatus.Idle,
+  countPlayers: 2 as CountPlayers,
+  players: [Player.Player1, Player.Player2] as GamePlayer[],
 };
 
+export const $game = createStore<GameProps>(initialState);
+
 export const { startGame, endGame, nextPlayer } = createApi($game, {
-  startGame: (state, { countPlayers }) => ({ countPlayers, status: GameStatus.Process, turn: Player.Computer }),
-  endGame: () => ({ countPlayers: 2, status: GameStatus.Idle, turn: Player.Idle }),
+  startGame: (state, { countPlayers, players }: { countPlayers: CountPlayers; players: GamePlayer[] }) => ({
+    players,
+    countPlayers,
+    turn: Player.Computer,
+    status: GameStatus.Process,
+  }),
+  endGame: () => initialState,
   nextPlayer: (state) => {
-    const players = playersOrder[state.countPlayers];
-    const currentIndex = players.indexOf(state.turn);
+    const { players } = state;
+    const currentIndex = players.indexOf(state.turn as GamePlayer);
     const nextIndex = (currentIndex + 1) % players.length;
 
     return { ...state, turn: players[nextIndex] };

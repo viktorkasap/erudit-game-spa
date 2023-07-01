@@ -3,20 +3,19 @@ import { useStore } from 'effector-react';
 
 import { Box, Group, Text } from '@mantine/core';
 
-import { $turn } from 'entities/turn';
+import { $game } from 'entities/game';
 
 export const Player = () => {
-  const player = useStore($turn);
+  const { turn, players } = useStore($game);
 
   return (
     <Box>
       <Group position="left" spacing="4">
-        <IconUser size="1rem" stroke="3px" />
-        <Text fw={600} fz="lg">
-          Player:
-        </Text>
+        {players.map((player) => {
+          return <IconUser key={player} size="1.5rem" stroke={player === turn ? '0.1875rem' : '0.15625rem'} />;
+        })}
       </Group>
-      <Text transform="capitalize">{player}</Text>
+      <Text transform="capitalize">{turn !== 'computer' && turn}</Text>
     </Box>
   );
 };
