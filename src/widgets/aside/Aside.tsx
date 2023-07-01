@@ -16,8 +16,8 @@ export const Aside = () => {
 
   return (
     <Box className={classes.wrapper}>
-      {GameStatus.Idle === game && <StartGame />}
-      {GameStatus.Process === game && (
+      {GameStatus.Idle === game.status && <StartGame />}
+      {GameStatus.Process === game.status && (
         <>
           <EndGame />
           <Box className={classes.box}>

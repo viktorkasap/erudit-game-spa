@@ -28,7 +28,7 @@ const useStyles = createStyles(() => {
   return {
     wrapper: {
       display: 'grid',
-      gridTemplateColumns: 'minmax(0, 9.375rem) minmax(0, 51.25rem)',
+      gridTemplateColumns: 'minmax(0, 12.5rem) minmax(0, 51.25rem)',
       gridTemplateAreas: `
         "aside board"
         "aside rack"
