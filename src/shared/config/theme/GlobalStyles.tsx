@@ -43,14 +43,14 @@ export const GlobalStyles = () => {
 
           '&*': {
             scrollbarWidth: 'thin',
-            scrollbarColor: `${theme.colors.dark[5]} ${theme.white}`,
+            scrollbarColor: `${theme.colors.dark[5]} transparent`,
           },
 
           '&::-webkit-scrollbar': {
             width: rem(8),
           },
           '&::-webkit-scrollbar-track': {
-            background: theme.white,
+            background: 'transparent',
           },
           '&::-webkit-scrollbar-thumb': {
             background: theme.colors.dark[5],
