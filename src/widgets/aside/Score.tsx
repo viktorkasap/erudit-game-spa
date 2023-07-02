@@ -62,7 +62,7 @@ const useStyles = createStyles((theme) => {
       padding: `${theme.spacing['6']} ${theme.spacing['8']}`,
     },
     currentUserRow: {
-      backgroundColor: theme.colors.dark[6],
+      backgroundColor: theme.colors.yellow[9],
       borderRadius: theme.radius.sm,
       color: theme.white,
     },

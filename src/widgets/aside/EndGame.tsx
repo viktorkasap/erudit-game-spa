@@ -5,12 +5,14 @@ import { Button } from '@mantine/core';
 import { resetBoard } from 'entities/board';
 import { endGame } from 'entities/game';
 import { resetBag } from 'entities/letterBag';
+import { resetPlayers } from 'entities/players';
 
 export const EndGame = () => {
   const handleEnd = () => {
     endGame();
-    resetBoard();
     resetBag();
+    resetBoard();
+    resetPlayers();
   };
 
   return (
