@@ -78,5 +78,5 @@ export const { createPlayers, addPlayerMove, removePlayerMove, addPlayerHistoryW
 });
 
 $players.watch((state) => {
-  log('[$playerMoves]', state);
+  log('[$player]', state);
 });
