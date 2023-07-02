@@ -30,8 +30,6 @@ export const Score = () => {
         </Text>
       </Group>
 
-      <Button rightIcon={<IconPlayerTrackNextFilled size="0.75rem" />}>Skip</Button>
-
       <Text>0/0</Text>
     </Box>
   );
