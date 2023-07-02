@@ -23,9 +23,6 @@ export const Aside = () => {
         <>
           <EndGame />
           <Box className={classes.box}>
-            <Player />
-          </Box>
-          <Box className={classes.box}>
             <Score />
           </Box>
         </>
