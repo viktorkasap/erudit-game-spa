@@ -4,9 +4,10 @@ import produce from 'immer';
 import { log } from 'shared/lib';
 import { buildBoard } from 'shared/lib/game';
 
-export const $board = createStore({ board: buildBoard(), startWord: '' });
+const initialState = { board: buildBoard(), startWord: '' };
+export const $board = createStore(initialState);
 
-export const { setCell, setEmptyCell, startWord } = createApi($board, {
+export const { setCell, setEmptyCell, startWord, resetBoard } = createApi($board, {
   setCell: (state, { indexRow, indexCell, letter }: { indexRow: number; indexCell: number; letter: string }) => {
     return produce(state, (draft) => {
       draft.board[indexRow][indexCell] = letter;
@@ -18,6 +19,7 @@ export const { setCell, setEmptyCell, startWord } = createApi($board, {
     });
   },
   startWord: (state, { word }) => ({ ...state, startWord: word }),
+  resetBoard: () => initialState,
 });
 
 $board.watch((state) => {
