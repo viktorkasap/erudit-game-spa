@@ -2,24 +2,7 @@
 import { createApi, createStore } from 'effector';
 
 import { log } from 'shared/lib';
-
-export type CountPlayers = 2 | 3 | 4;
-export enum GameStatus {
-  Idle,
-  Process,
-  End,
-}
-
-export enum Player {
-  Idle = 'idle',
-  Computer = 'computer',
-  Player1 = 'player1',
-  Player2 = 'player2',
-  Player3 = 'player3',
-  Player4 = 'player4',
-}
-
-export type GamePlayer = Player.Player1 | Player.Player2 | Player.Player3 | Player.Player4;
+import { CountPlayers, GamePlayer, GameStatus, Player } from 'shared/types';
 
 interface GameProps {
   turn: Player;

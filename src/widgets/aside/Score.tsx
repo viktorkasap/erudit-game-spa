@@ -1,4 +1,4 @@
-import { IconFileInvoice, IconPlayerSkipForwardFilled } from '@tabler/icons-react';
+import { IconFileInvoice, IconPlayerTrackNextFilled } from '@tabler/icons-react';
 import { useStore } from 'effector-react';
 
 import { Box, Text, createStyles, Group, Button } from '@mantine/core';
@@ -30,7 +30,7 @@ export const Score = () => {
         </Text>
       </Group>
 
-      <Button rightIcon={<IconPlayerSkipForwardFilled size="0.75rem" />}>Skip</Button>
+      <Button rightIcon={<IconPlayerTrackNextFilled size="0.75rem" />}>Skip</Button>
 
       <Text>0/0</Text>
     </Box>

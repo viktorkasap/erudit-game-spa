@@ -4,7 +4,9 @@ import { Box, createStyles } from '@mantine/core';
 
 import { Player } from 'widgets/aside/Player';
 
-import { $game, GameStatus } from 'entities/game';
+import { $game } from 'entities/game';
+
+import { GameStatus, Player as _Player } from 'shared/types';
 
 import { EndGame } from './EndGame';
 import { Score } from './Score';
@@ -17,7 +19,7 @@ export const Aside = () => {
   return (
     <Box className={classes.wrapper}>
       {GameStatus.Idle === game.status && <StartGame />}
-      {GameStatus.Process === game.status && (
+      {GameStatus.Process === game.status && game.turn !== _Player.Computer && (
         <>
           <EndGame />
           <Box className={classes.box}>

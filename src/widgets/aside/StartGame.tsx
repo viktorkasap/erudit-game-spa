@@ -4,7 +4,10 @@ import { IconPlayerPlayFilled } from '@tabler/icons-react';
 
 import { Button, createStyles, Flex, Select } from '@mantine/core';
 
-import { CountPlayers, GamePlayer, Player, startGame } from 'entities/game';
+import { startGame } from 'entities/game';
+import { createPlayers } from 'entities/players';
+
+import { CountPlayers, GamePlayer, Player } from 'shared/types';
 
 const playersOrder = {
   2: [Player.Player1, Player.Player2],
@@ -18,6 +21,7 @@ export const StartGame = () => {
 
   const handleClick = () => {
     startGame({ countPlayers, players: playersOrder[countPlayers] });
+    createPlayers({ playersArray: playersOrder[countPlayers] });
   };
 
   return (

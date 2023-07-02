@@ -4,20 +4,13 @@ import { createApi, createStore } from 'effector';
 import produce from 'immer';
 
 import { log } from 'shared/lib';
-
-enum Player {
-  Player1 = 'player1',
-  Player2 = 'player2',
-  Player3 = 'player3',
-  Player4 = 'player4',
-}
-
-export type GamePlayer = Player.Player1 | Player.Player2 | Player.Player3 | Player.Player4;
+import { GamePlayer } from 'shared/types';
 
 interface PlayersProps {
   score: number;
   possibleScore: number;
   moves: Map<string, string>;
+  history: string[];
 }
 
 type PlayerStateProps = Record<GamePlayer, PlayersProps>;
@@ -33,12 +26,17 @@ interface PlayerMove {
   possibleScore: number;
 }
 
+interface PlayerHistoryWord {
+  player: GamePlayer;
+  word: string;
+}
+
 export const $players = createStore<PlayerStateProps>({} as PlayerStateProps);
 
-export const { createPlayers, addPlayerMove, removePlayerMove, removePlayers } = createApi($players, {
+export const { createPlayers, addPlayerMove, removePlayerMove, addPlayerHistoryWord, removePlayers } = createApi($players, {
   createPlayers: (_, { playersArray }: CreatePlayers) => {
     return playersArray.reduce((acc, current) => {
-      return { ...acc, [current]: { moves: new Map(), score: 0, possibleScore: 0 } };
+      return { ...acc, [current]: { moves: new Map(), score: 0, possibleScore: 0, history: [] } };
     }, {} as PlayerStateProps);
   },
   addPlayerMove: (state, { player, position, letter, possibleScore }: PlayerMove) => {
@@ -63,6 +61,17 @@ export const { createPlayers, addPlayerMove, removePlayerMove, removePlayers } =
 
       _player.moves.delete(position);
       _player.possibleScore = possibleScore;
+    });
+  },
+  addPlayerHistoryWord: (state, { player, word }: PlayerHistoryWord) => {
+    return produce(state, (draft) => {
+      const _player = draft[player];
+
+      if (!_player) {
+        return draft;
+      }
+
+      _player.history.push(word);
     });
   },
   removePlayers: () => ({} as PlayerStateProps),
