@@ -16,10 +16,13 @@ const useTails = () => {
   const bag = useStore($letterBag);
   const players = useStore($players);
 
+  const shuffledBag = shuffleArray([...bag]);
   const currentPlayer = players[turn as GamePlayer];
   const playerTailsLength = currentPlayer.tails.length;
-  const shuffledBag = shuffleArray([...bag]);
   const newTails = shuffledBag.slice(0, 7 - playerTailsLength);
+
+  // TODO тут будет ошибка скорее всего
+  //  каждый раз когда будет удаляться фишка пользователся из мешка будет браться новая фишка
 
   if (playerTailsLength < 7) {
     addPlayerTails({ player: turn as GamePlayer, tails: newTails });
