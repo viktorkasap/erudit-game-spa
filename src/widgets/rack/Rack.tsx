@@ -5,16 +5,19 @@ import { Group } from '@mantine/core';
 import { ApplyMoveButton } from 'widgets/rack/ApplyMoveButton';
 import { LetterBag } from 'widgets/rack/LetterBag';
 
+import { $game } from 'entities/game';
 import { Rack as RackComponent } from 'entities/rack';
-import { $turn } from 'entities/turn';
+import { Player } from 'entities/turn';
+
+import { GameStatus } from 'shared/types';
 
 import { ShuffleButton } from './ShuffleButton';
 import { Tails } from './Tails';
 
 export const Rack = () => {
-  const turnPlayer = useStore($turn);
+  const { turn, status } = useStore($game);
 
-  if (turnPlayer === 'computer') {
+  if (status === GameStatus.Idle || turn === Player.Computer) {
     return null;
   }
 

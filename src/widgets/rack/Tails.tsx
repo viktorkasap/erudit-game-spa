@@ -6,39 +6,36 @@ import { Flex } from '@mantine/core';
 
 import { Tail } from 'widgets/rack/Tail';
 
-import { $letterBag } from 'entities/letterBag';
-import { $rackTails, addLetterToPlayer } from 'entities/rack';
+import { $game } from 'entities/game';
+import { $letterBag, removeLetter } from 'entities/letterBag';
+import { $players, addPlayerTails } from 'entities/players';
 
+import { log } from 'shared/lib';
 import { shuffleArray } from 'shared/lib/shuffleArray';
+import { GamePlayer } from 'shared/types';
 
 export const Tails = () => {
+  const { turn } = useStore($game);
   const bag = useStore($letterBag);
-  const tails = useStore($rackTails);
-  const [letters, setLetters] = useState<string[] | null>(null);
+  const players = useStore($players);
 
-  useEffect(() => {
-    if (!letters) {
-      setLetters(shuffleArray(bag).slice(0, 7));
-    }
+  const currentPlayer = players[turn as GamePlayer];
+  const playerTailsLength = currentPlayer.tails.length;
+  const shuffledBag = shuffleArray([...bag]);
+  const newTails = shuffledBag.slice(0, 7 - playerTailsLength);
 
-    if (letters) {
-      'роторсн'.split('').forEach((letter) => {
-        addLetterToPlayer(letter);
-      });
-      // 'селение'.split('').forEach((letter) => {
-      //   addLetterToPlayer(letter);
-      // });
+  if (playerTailsLength < 7) {
+    addPlayerTails({ player: turn as GamePlayer, tails: newTails });
 
-      // original
-      // letters?.forEach((letter) => {
-      //   setRackTail(letter);
-      // });
-    }
-  }, [bag, letters]);
+    // remove letters from bag
+    newTails.forEach((letter) => {
+      removeLetter(letter);
+    });
+  }
 
   return (
     <Flex gap="0.25rem">
-      {tails.map((tail, index) => (
+      {currentPlayer.tails.map((tail, index) => (
         <Tail tail={tail} key={`tail-${index}`} index={index} />
       ))}
     </Flex>

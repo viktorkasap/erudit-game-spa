@@ -12,7 +12,7 @@ interface PlayersProps {
   possibleScore: number;
   moves: Map<string, string>;
   history: string[];
-  rack: string[];
+  tails: string[];
 }
 
 type PlayerStateProps = Record<GamePlayer, PlayersProps>;
@@ -51,10 +51,20 @@ type PlayerShuffleTails = PlayerAction;
 
 export const $players = createStore<PlayerStateProps>({} as PlayerStateProps);
 
-export const { createPlayers, addPlayerMove, removePlayerMove, addPlayerHistoryWord, resetPlayers } = createApi($players, {
+export const {
+  createPlayers,
+  addPlayerMove,
+  removePlayerMove,
+  addPlayerHistoryWord,
+  addPlayerTails,
+  addPlayerTail,
+  removePlayerTail,
+  shufflePlayerTails,
+  resetPlayers,
+} = createApi($players, {
   createPlayers: (_, { playersArray }: CreatePlayers) => {
     return playersArray.reduce((acc, current) => {
-      return { ...acc, [current]: { moves: new Map(), score: 0, possibleScore: 0, history: [], rack: [] } };
+      return { ...acc, [current]: { moves: new Map(), score: 0, possibleScore: 0, history: [], tails: [] } };
     }, {} as PlayerStateProps);
   },
   addPlayerMove: (state, { player, position, letter, possibleScore }: PlayerMove) => {
@@ -100,7 +110,7 @@ export const { createPlayers, addPlayerMove, removePlayerMove, addPlayerHistoryW
         return draft;
       }
 
-      _player.rack = tails;
+      _player.tails = tails;
     });
   },
   addPlayerTail: (state, { player, tail }: PlayerTail) => {
@@ -111,7 +121,7 @@ export const { createPlayers, addPlayerMove, removePlayerMove, addPlayerHistoryW
         return draft;
       }
 
-      _player.rack.push(tail);
+      _player.tails.push(tail);
     });
   },
   removePlayerTail: (state, { player, tailIndex }: PlayerRemoveTail) => {
@@ -122,7 +132,7 @@ export const { createPlayers, addPlayerMove, removePlayerMove, addPlayerHistoryW
         return draft;
       }
 
-      _player.rack = _player.rack.filter((_, index) => index !== tailIndex);
+      _player.tails = _player.tails.filter((_, index) => index !== tailIndex);
     });
   },
   shufflePlayerTails: (state, { player }: PlayerShuffleTails) => {
@@ -133,7 +143,7 @@ export const { createPlayers, addPlayerMove, removePlayerMove, addPlayerHistoryW
         return draft;
       }
 
-      _player.rack = shuffleArray(_player.rack);
+      _player.tails = shuffleArray(_player.tails);
     });
   },
   resetPlayers: () => ({} as PlayerStateProps),
