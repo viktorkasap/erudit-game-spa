@@ -1,5 +1,3 @@
-import { useEffect, useState } from 'react';
-
 import { useStore } from 'effector-react';
 
 import { Flex } from '@mantine/core';
@@ -10,11 +8,10 @@ import { $game } from 'entities/game';
 import { $letterBag, removeLetter } from 'entities/letterBag';
 import { $players, addPlayerTails } from 'entities/players';
 
-import { log } from 'shared/lib';
 import { shuffleArray } from 'shared/lib/shuffleArray';
 import { GamePlayer } from 'shared/types';
 
-export const Tails = () => {
+const useTails = () => {
   const { turn } = useStore($game);
   const bag = useStore($letterBag);
   const players = useStore($players);
@@ -33,9 +30,15 @@ export const Tails = () => {
     });
   }
 
+  return { tails: currentPlayer.tails };
+};
+
+export const Tails = () => {
+  const { tails } = useTails();
+
   return (
-    <Flex gap="0.25rem">
-      {currentPlayer.tails.map((tail, index) => (
+    <Flex gap="4">
+      {tails.map((tail, index) => (
         <Tail tail={tail} key={`tail-${index}`} index={index} />
       ))}
     </Flex>
