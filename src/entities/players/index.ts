@@ -1,11 +1,13 @@
 /* eslint-disable no-unused-vars */
 
 import { createApi, createStore } from 'effector';
-import produce from 'immer';
+import produce, { enableMapSet } from 'immer';
 
 import { log } from 'shared/lib';
 import { shuffleArray } from 'shared/lib/shuffleArray';
 import { GamePlayer } from 'shared/types';
+
+enableMapSet(); // включает плагин Mep.set в immer
 
 interface PlayersProps {
   score: number;
@@ -77,6 +79,8 @@ export const {
 
       _player.moves.set(position, letter);
       _player.possibleScore = possibleScore;
+
+      return draft;
     });
   },
   removePlayerMove: (state, { player, position, possibleScore }: Omit<PlayerMove, 'letter'>) => {
@@ -150,5 +154,5 @@ export const {
 });
 
 $players.watch((state) => {
-  log('[$player]', state);
+  log('[$players]', state);
 });

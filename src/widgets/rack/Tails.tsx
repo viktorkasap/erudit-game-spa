@@ -24,7 +24,7 @@ const useTails = () => {
   // TODO тут будет ошибка скорее всего
   //  каждый раз когда будет удаляться фишка пользователся из мешка будет браться новая фишка
 
-  if (playerTailsLength < 7) {
+  if (playerTailsLength < 7 && currentPlayer.moves.size === 0) {
     addPlayerTails({ player: turn as GamePlayer, tails: newTails });
 
     // remove letters from bag

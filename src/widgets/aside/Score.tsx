@@ -16,6 +16,10 @@ export const Score = () => {
   const players = useStore($players);
   const { turn } = useStore($game);
 
+  const handleSkip = () => {
+    nextPlayer();
+  };
+
   // const board = useStore($board);
   // const playerMoves = useStore($playerMoves);
   // const history = useStore($history);
@@ -33,7 +37,7 @@ export const Score = () => {
             Score:
           </Text>
         </Group>
-        <Button size="xs" rightIcon={<IconPlayerTrackNextFilled size="0.75rem" />} onClick={() => nextPlayer()}>
+        <Button size="xs" rightIcon={<IconPlayerTrackNextFilled size="0.75rem" />} onClick={handleSkip}>
           Skip
         </Button>
       </Group>

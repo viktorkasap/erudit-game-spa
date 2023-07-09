@@ -27,18 +27,18 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
     }
 
     if (!isEmpty && playerTurnMoves.has(`${indexRow}-${indexCell}`)) {
-      addLetterToPlayer(children);
       setEmptyCell({ indexRow, indexCell });
 
+      addLetterToPlayer(children);
       removePlayerMove(`${indexRow}-${indexCell}`);
     }
 
     if (isEmpty && selectedTail?.letter) {
       setSelectedCell(null);
       setSelectedTail(null);
-      removeLetterFromPlayer(selectedTail.index);
       setCell({ indexRow, indexCell, letter: selectedTail.letter });
 
+      removeLetterFromPlayer(selectedTail.index);
       addPlayerMove({ position: `${indexRow}-${indexCell}`, letter: selectedTail.letter });
     }
   };
