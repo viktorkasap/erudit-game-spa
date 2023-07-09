@@ -22,8 +22,6 @@ export const Tail = ({ index, tail }: TailProps) => {
       // TODO тут надо добавить удаление из фишек на руках игрока когда он их ставит на поле
       //  использовать новый стор $player и $game
 
-      // removeLetterFromPlayer(index);
-
       removePlayerTail({ player: turn as GamePlayer, tailIndex: index });
       addPlayerMove({
         letter,
@@ -34,7 +32,6 @@ export const Tail = ({ index, tail }: TailProps) => {
 
       setSelectedCell(null);
       setSelectedTail(null);
-      // addPlayerMove({ position: `${selectedCell.indexRow}-${selectedCell.indexCell}`, letter });
       setCell({ indexRow: selectedCell.indexRow, indexCell: selectedCell.indexCell, letter });
 
       return;

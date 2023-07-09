@@ -8,7 +8,7 @@ import { $game } from 'entities/game';
 import { $letterBag, removeLetter } from 'entities/letterBag';
 import { $players, addPlayerTails } from 'entities/players';
 
-import { shuffleArray } from 'shared/lib/shuffleArray';
+import { shuffleArray } from 'shared/lib';
 import { GamePlayer } from 'shared/types';
 
 const useTails = () => {
@@ -21,11 +21,8 @@ const useTails = () => {
   const playerTailsLength = currentPlayer.tails.length;
   const newTails = shuffledBag.slice(0, 7 - playerTailsLength);
 
-  // TODO тут будет ошибка скорее всего
-  //  каждый раз когда будет удаляться фишка пользователся из мешка будет браться новая фишка
-
   if (playerTailsLength < 7 && currentPlayer.moves.size === 0) {
-    addPlayerTails({ player: turn as GamePlayer, tails: newTails });
+    addPlayerTails({ player: turn as GamePlayer, tails: [...currentPlayer.tails, ...newTails] });
 
     // remove letters from bag
     newTails.forEach((letter) => {

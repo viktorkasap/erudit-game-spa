@@ -1,14 +1,25 @@
 import { IconPlayerTrackNextFilled } from '@tabler/icons-react';
+import { useStore } from 'effector-react';
 
 import { ActionIcon, createStyles } from '@mantine/core';
 
-import { nextPlayer } from 'entities/game';
+import { $game, nextPlayer } from 'entities/game';
+import { removePlayerMoves } from 'entities/players';
+
+import { GamePlayer } from 'shared/types';
 
 export const SkipMove = () => {
   const { classes } = useStyles();
 
+  const { turn } = useStore($game);
+
+  const handleClick = () => {
+    removePlayerMoves({ player: turn as GamePlayer });
+    nextPlayer();
+  };
+
   return (
-    <ActionIcon className={classes.skip} variant="light" onClick={() => nextPlayer()}>
+    <ActionIcon className={classes.skip} variant="light" onClick={handleClick}>
       <IconPlayerTrackNextFilled size="1rem" />
     </ActionIcon>
   );

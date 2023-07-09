@@ -57,6 +57,7 @@ export const {
   createPlayers,
   addPlayerMove,
   removePlayerMove,
+  removePlayerMoves,
   addPlayerHistoryWord,
   addPlayerTails,
   addPlayerTail,
@@ -93,6 +94,18 @@ export const {
 
       _player.moves.delete(position);
       _player.possibleScore = possibleScore;
+    });
+  },
+  removePlayerMoves: (state, { player }: { player: GamePlayer }) => {
+    return produce(state, (draft) => {
+      const _player = draft[player];
+
+      if (!_player) {
+        return draft;
+      }
+
+      _player.moves.clear();
+      _player.possibleScore = 0;
     });
   },
   addPlayerHistoryWord: (state, { player, word }: PlayerHistoryWord) => {
