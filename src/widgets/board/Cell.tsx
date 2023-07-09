@@ -4,16 +4,20 @@ import { useStore } from 'effector-react';
 
 import { setCell, setEmptyCell } from 'entities/board';
 import { $selectedCell, Cell as CellComponent, setSelectedCell } from 'entities/cell';
-import { $playerMoves, removePlayerMove, addPlayerMove } from 'entities/player';
-import { removeLetterFromPlayer, addLetterToPlayer } from 'entities/rack';
+import { $game } from 'entities/game';
+import { $players, removePlayerTail, addPlayerMove, addPlayerTail, removePlayerMove } from 'entities/players';
 import { $selectedRackTail, setSelectedTail } from 'entities/tail';
 
 import { letters } from 'shared/lib/game';
+import { GamePlayer } from 'shared/types';
 
 export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
   const selectedTail = useStore($selectedRackTail);
   const selectedCell = useStore($selectedCell);
-  const playerTurnMoves = useStore($playerMoves);
+
+  const players = useStore($players);
+  const { turn } = useStore($game);
+  const currentPlayer = players[turn as GamePlayer];
 
   const isSelectedCurrentCell = selectedCell && selectedCell.indexCell === indexCell && selectedCell.indexRow === indexRow;
 
@@ -26,32 +30,41 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
       setSelectedCell({ indexRow, indexCell });
     }
 
-    if (!isEmpty && playerTurnMoves.has(`${indexRow}-${indexCell}`)) {
+    if (!isEmpty && currentPlayer.moves.has(`${indexRow}-${indexCell}`)) {
       setEmptyCell({ indexRow, indexCell });
 
-      addLetterToPlayer(children);
-      removePlayerMove(`${indexRow}-${indexCell}`);
+      removePlayerMove({ player: turn as GamePlayer, position: `${indexRow}-${indexCell}` });
+      addPlayerTail({ player: turn as GamePlayer, tail: children as string });
     }
 
     if (isEmpty && selectedTail?.letter) {
+      // TODO это условие дублирется в Tail.tsx
+
+      removePlayerTail({
+        player: turn as GamePlayer,
+        tailIndex: selectedTail.index,
+      });
+      addPlayerMove({
+        letter: selectedTail.letter,
+        player: turn as GamePlayer,
+        position: `${indexRow}-${indexCell}`,
+      });
+
       setSelectedCell(null);
       setSelectedTail(null);
       setCell({ indexRow, indexCell, letter: selectedTail.letter });
-
-      removeLetterFromPlayer(selectedTail.index);
-      addPlayerMove({ position: `${indexRow}-${indexCell}`, letter: selectedTail.letter });
     }
   };
 
   return (
     <CellComponent
-      value={letters[String(children)]?.value}
       isEmpty={isEmpty}
       indexRow={indexRow}
       indexCell={indexCell}
       onClick={handleCellClick}
+      value={letters[String(children)]?.value}
       isSelected={Boolean(isSelectedCurrentCell)}
-      isEditable={playerTurnMoves.has(`${indexRow}-${indexCell}`)}>
+      isEditable={currentPlayer?.moves.has(`${indexRow}-${indexCell}`)}>
       {children}
     </CellComponent>
   );

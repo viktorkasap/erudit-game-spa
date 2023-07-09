@@ -17,7 +17,12 @@ export const Tail = ({ index, tail }: TailProps) => {
 
   const handleSelected = ({ index, letter }: { index: number; letter: string }) => {
     if (selectedCell) {
-      removePlayerTail({ player: turn as GamePlayer, tailIndex: index });
+      // TODO это условие дублирется в Cell.tsx
+
+      removePlayerTail({
+        player: turn as GamePlayer,
+        tailIndex: index,
+      });
       addPlayerMove({
         letter,
         player: turn as GamePlayer,
