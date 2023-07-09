@@ -12,6 +12,7 @@ import { Player } from 'entities/turn';
 import { GameStatus } from 'shared/types';
 
 import { ShuffleButton } from './ShuffleButton';
+import { SkipMove } from './SkipMove';
 import { Tails } from './Tails';
 
 export const Rack = () => {
@@ -30,6 +31,7 @@ export const Rack = () => {
       <Group spacing="0.25rem">
         <ShuffleButton />
         <ApplyMoveButton />
+        <SkipMove />
       </Group>
     </RackComponent>
   );
