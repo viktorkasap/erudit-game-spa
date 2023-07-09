@@ -3,14 +3,20 @@ import { useStore } from 'effector-react';
 
 import { ActionIcon, createStyles } from '@mantine/core';
 
-import { $playerMoves } from 'entities/player';
+import { $game } from 'entities/game';
+import { $players } from 'entities/players';
+
+import { GamePlayer } from 'shared/types';
 
 export const ApplyMoveButton = () => {
   const { classes } = useStyles();
-  const playersMoves = useStore($playerMoves);
+
+  const { turn } = useStore($game);
+  const players = useStore($players);
+  const currentPlayer = players[turn as GamePlayer];
 
   return (
-    <ActionIcon className={classes.button} variant="light" disabled={!playersMoves.size}>
+    <ActionIcon className={classes.button} variant="light" disabled={!currentPlayer.moves.size}>
       <IconCheck size="1rem" stroke="0.25rem" />
     </ActionIcon>
   );

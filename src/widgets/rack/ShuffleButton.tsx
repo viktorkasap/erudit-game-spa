@@ -3,20 +3,26 @@ import { useStore } from 'effector-react';
 
 import { ActionIcon, createStyles } from '@mantine/core';
 
-import { $rackTails, shuffleRackTails } from 'entities/rack';
+import { $game } from 'entities/game';
+import { $players, shufflePlayerTails } from 'entities/players';
 import { setSelectedTail } from 'entities/tail';
+
+import { GamePlayer } from 'shared/types';
 
 export const ShuffleButton = () => {
   const { classes } = useStyles();
-  const tails = useStore($rackTails);
+
+  const { turn } = useStore($game);
+  const players = useStore($players);
+  const currentPlayer = players[turn as GamePlayer];
 
   const handleShuffle = () => {
     setSelectedTail(null);
-    shuffleRackTails();
+    shufflePlayerTails({ player: turn as GamePlayer });
   };
 
   return (
-    <ActionIcon onClick={handleShuffle} className={classes.shuffle} variant="light" disabled={tails.length <= 1}>
+    <ActionIcon onClick={handleShuffle} className={classes.shuffle} variant="light" disabled={currentPlayer.tails.length <= 1}>
       <IconAB2 size="1rem" />
     </ActionIcon>
   );

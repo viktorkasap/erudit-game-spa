@@ -1,26 +1,16 @@
-import { IconFileInvoice, IconPlayerTrackNextFilled, IconUser } from '@tabler/icons-react';
+import { IconFileInvoice, IconUser } from '@tabler/icons-react';
 import { useStore } from 'effector-react';
 
-import { Box, Text, createStyles, Group, Button } from '@mantine/core';
+import { Box, Text, createStyles, Group } from '@mantine/core';
 
-import { $board } from 'entities/board';
-import { $game, nextPlayer } from 'entities/game';
-import { $players, removePlayerMoves } from 'entities/players';
-
-import { log } from 'shared/lib';
-import { checkMove } from 'shared/lib/game';
-import { GamePlayer } from 'shared/types';
+import { $game } from 'entities/game';
+import { $players } from 'entities/players';
 
 export const Score = () => {
   const { classes, cx } = useStyles();
 
   const players = useStore($players);
   const { turn } = useStore($game);
-
-  const handleSkip = () => {
-    removePlayerMoves({ player: turn as GamePlayer });
-    nextPlayer();
-  };
 
   // const board = useStore($board);
   // const playerMoves = useStore($playerMoves);
@@ -39,9 +29,6 @@ export const Score = () => {
             Score:
           </Text>
         </Group>
-        <Button size="xs" rightIcon={<IconPlayerTrackNextFilled size="0.75rem" />} onClick={handleSkip}>
-          Skip
-        </Button>
       </Group>
 
       {Object.entries(players).map(([player, values]) => {
