@@ -5,10 +5,11 @@ import { Box, Text, createStyles, Group, Button } from '@mantine/core';
 
 import { $board } from 'entities/board';
 import { $game, nextPlayer } from 'entities/game';
-import { $players } from 'entities/players';
+import { $players, removePlayerMoves } from 'entities/players';
 
 import { log } from 'shared/lib';
 import { checkMove } from 'shared/lib/game';
+import { GamePlayer } from 'shared/types';
 
 export const Score = () => {
   const { classes, cx } = useStyles();
@@ -17,6 +18,7 @@ export const Score = () => {
   const { turn } = useStore($game);
 
   const handleSkip = () => {
+    removePlayerMoves({ player: turn as GamePlayer });
     nextPlayer();
   };
 

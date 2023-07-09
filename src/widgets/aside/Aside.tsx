@@ -2,8 +2,6 @@ import { useStore } from 'effector-react';
 
 import { Box, createStyles } from '@mantine/core';
 
-import { Player } from 'widgets/aside/Player';
-
 import { $game } from 'entities/game';
 
 import { GameStatus, Player as _Player } from 'shared/types';

@@ -30,6 +30,9 @@ interface PlayerAction {
 interface PlayerMove extends PlayerAction {
   position: string;
   letter: string;
+}
+
+interface PlayerPosibleScore extends PlayerAction {
   possibleScore: number;
 }
 
@@ -58,6 +61,7 @@ export const {
   addPlayerMove,
   removePlayerMove,
   removePlayerMoves,
+  addPlayerPossibleScore, // TODO вохможные очки надо считать в Score компоненте
   addPlayerHistoryWord,
   addPlayerTails,
   addPlayerTail,
@@ -70,7 +74,7 @@ export const {
       return { ...acc, [current]: { moves: new Map(), score: 0, possibleScore: 0, history: [], tails: [] } };
     }, {} as PlayerStateProps);
   },
-  addPlayerMove: (state, { player, position, letter, possibleScore }: PlayerMove) => {
+  addPlayerMove: (state, { player, position, letter }: PlayerMove) => {
     return produce(state, (draft) => {
       const _player = draft[player];
 
@@ -79,12 +83,24 @@ export const {
       }
 
       _player.moves.set(position, letter);
+
+      return draft;
+    });
+  },
+  addPlayerPossibleScore: (state, { player, possibleScore }: PlayerPosibleScore) => {
+    return produce(state, (draft) => {
+      const _player = draft[player];
+
+      if (!_player) {
+        return draft;
+      }
+
       _player.possibleScore = possibleScore;
 
       return draft;
     });
   },
-  removePlayerMove: (state, { player, position, possibleScore }: Omit<PlayerMove, 'letter'>) => {
+  removePlayerMove: (state, { player, position }: Omit<PlayerMove, 'letter'>) => {
     return produce(state, (draft) => {
       const _player = draft[player];
 
@@ -93,7 +109,6 @@ export const {
       }
 
       _player.moves.delete(position);
-      _player.possibleScore = possibleScore;
     });
   },
   removePlayerMoves: (state, { player }: { player: GamePlayer }) => {
