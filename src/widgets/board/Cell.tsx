@@ -10,14 +10,14 @@ import { $selectedRackTail, setSelectedTail } from 'entities/tail';
 
 import { log } from 'shared/lib';
 import { letters } from 'shared/lib/game';
-import { GamePlayer } from 'shared/types';
+import { GamePlayer, GameStatus } from 'shared/types';
 
 export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
   const selectedTail = useStore($selectedRackTail);
   const selectedCell = useStore($selectedCell);
 
   const players = useStore($players);
-  const { turn } = useStore($game);
+  const { turn, status } = useStore($game);
   const currentPlayer = players[turn as GamePlayer];
 
   const isSelectedCurrentCell = selectedCell && selectedCell.indexCell === indexCell && selectedCell.indexRow === indexRow;
@@ -79,6 +79,7 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
       onClick={handleCellClick}
       value={letters[String(children)]?.value}
       isSelected={Boolean(isSelectedCurrentCell)}
+      isGameStatusIdle={status === GameStatus.Idle}
       isEditable={currentPlayer?.moves.has(`${indexRow}-${indexCell}`)}>
       {children}
     </CellComponent>

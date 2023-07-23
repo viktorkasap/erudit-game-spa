@@ -50,7 +50,7 @@ const useStyles = createStyles((theme) => ({
     transition: 'background-color .2s ease',
 
     '&:hover': {
-      backgroundColor: theme.colors.dark[7],
+      backgroundColor: theme.colors.red[6],
       color: theme.white,
     },
 

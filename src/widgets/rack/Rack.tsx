@@ -2,7 +2,7 @@ import { useStore } from 'effector-react';
 
 import { Group } from '@mantine/core';
 
-import { ApplyMoveButton } from 'widgets/rack/ApplyMoveButton';
+import { ConfirmMoveButton } from 'widgets/rack/ConfirmMoveButton';
 import { LetterBag } from 'widgets/rack/LetterBag';
 
 import { $game } from 'entities/game';
@@ -30,7 +30,7 @@ export const Rack = () => {
 
       <Group spacing="0.25rem">
         <ShuffleButton />
-        <ApplyMoveButton />
+        <ConfirmMoveButton />
         <SkipMove />
       </Group>
     </RackComponent>

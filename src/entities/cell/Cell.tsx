@@ -4,7 +4,7 @@ import { Box, createStyles, Text } from '@mantine/core';
 
 import { bonus } from 'shared/lib/game';
 
-export const Cell = ({ children, value, indexCell, indexRow, isEmpty, onClick, isSelected, isEditable }: CellProps) => {
+export const Cell = ({ children, value, indexCell, indexRow, isEmpty, onClick, isSelected, isEditable, isGameStatusIdle }: CellProps) => {
   const { classes, cx } = useStyles();
 
   const isWordX3 = bonus.wordX3.includes(`${indexRow}-${indexCell}`);
@@ -21,17 +21,25 @@ export const Cell = ({ children, value, indexCell, indexRow, isEmpty, onClick, i
     [classes.cellSelected]: isSelected,
     [classes.isEditable]: isEditable,
   });
+  const handleClick = () => {
+    if (isGameStatusIdle) {
+      return;
+    }
+
+    onClick();
+  };
 
   return (
     <Box
-      onClick={onClick}
-      className={isEmpty || isEditable ? className : cx(classes.cell, classes.occupiedCell)}
-      data-cell={`${indexRow}-${indexCell}`}
+      onClick={handleClick}
       data-cell-word-x3={isWordX3}
       data-cell-word-x2={isWordX2}
+      data-status-idle={isGameStatusIdle}
       data-cell-letter-x3={isLetterX3}
       data-cell-letter-x2={isLetterX2}
-      data-cell-center={indexRow === 7 && indexCell === 7}>
+      data-cell={`${indexRow}-${indexCell}`}
+      data-cell-center={indexRow === 7 && indexCell === 7}
+      className={isEmpty || isEditable ? className : cx(classes.cell, classes.occupiedCell)}>
       {isEmpty ? (
         <PlaceHolder isWordX3={isWordX3} isWordX2={isWordX2} isLetterX3={isLetterX3} isLetterX2={isLetterX2} />
       ) : (
@@ -89,9 +97,9 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
     backgroundColor: colors.indian[3],
     borderRadius: '0.25rem',
     lineHeight: '1.2',
-    cursor: 'pointer',
 
-    '&:hover': {
+    '&:not([data-status-idle="true"]):hover': {
+      cursor: 'pointer',
       backgroundColor: colors.indian[2],
     },
   },
@@ -99,7 +107,7 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
   cellCenter: {
     backgroundColor: colors.dark[5],
 
-    '&:hover': {
+    '&:not([data-status-idle="true"]):hover': {
       backgroundColor: colors.dark[4],
     },
   },
@@ -107,7 +115,7 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
   cellWordX3: {
     backgroundColor: colors.red[4],
 
-    '&:hover': {
+    '&:not([data-status-idle="true"]):hover': {
       backgroundColor: colors.red[3],
     },
   },
@@ -115,7 +123,7 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
   cellWordX2: {
     backgroundColor: colors.blue[4],
 
-    '&:hover': {
+    '&:not([data-status-idle="true"]):hover': {
       backgroundColor: colors.blue[3],
     },
   },
@@ -123,7 +131,7 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
   cellLetterX3: {
     backgroundColor: colors.yellow[4],
 
-    '&:hover': {
+    '&:not([data-status-idle="true"]):hover': {
       backgroundColor: colors.yellow[3],
     },
   },
@@ -131,7 +139,7 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
   cellLetterX2: {
     backgroundColor: colors.green[4],
 
-    '&:hover': {
+    '&:not([data-status-idle="true"]):hover': {
       backgroundColor: colors.green[3],
     },
   },
@@ -147,7 +155,7 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
     backgroundColor: colors.dark[7],
     textTransform: 'uppercase',
 
-    '&:hover': {
+    '&:not([data-status-idle="true"]):hover': {
       backgroundColor: colors.dark[6],
     },
   },
@@ -158,9 +166,9 @@ const useStyles = createStyles(({ colors, fontSizes, colorScheme, white }) => ({
     fontSize: fontSizes.xl,
     backgroundColor: colors.dark[4],
     textTransform: 'uppercase',
-    cursor: 'default',
 
-    '&:hover': {
+    '&:not([data-status-idle="true"]):hover': {
+      cursor: 'default',
       backgroundColor: colors.dark[4],
     },
   },
@@ -180,4 +188,5 @@ interface CellProps extends PropsWithChildren {
   onClick: () => void;
   isEditable: boolean;
   value?: number | null;
+  isGameStatusIdle?: boolean;
 }
