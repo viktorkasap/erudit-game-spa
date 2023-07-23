@@ -24,36 +24,49 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
 
   const handleCellClick = () => {
     if (isSelectedCurrentCell) {
+      // сбросить состояние стора выбранной ячейки
       setSelectedCell(null);
     }
 
     if (!isSelectedCurrentCell && isEmpty) {
+      // установить координаты ячейки в стор ячейки
       setSelectedCell({ indexRow, indexCell });
     }
 
     if (!isEmpty && currentPlayer.moves.has(`${indexRow}-${indexCell}`)) {
-      log('removing tail');
+      // 1) очистить ячейку доски
       setEmptyCell({ indexRow, indexCell });
 
+      // 2) удалить ход у игрока
       removePlayerMove({ player: turn as GamePlayer, position: `${indexRow}-${indexCell}` });
+
+      // 3) вернуть фишку в руки игрока
       addPlayerTail({ player: turn as GamePlayer, tail: children as string });
     }
 
     if (isEmpty && selectedTail?.letter) {
       // TODO это условие дублирется в Tail.tsx
 
+      // 1) забрать фишку у игрока
       removePlayerTail({
         player: turn as GamePlayer,
         tailIndex: selectedTail.index,
       });
+
+      // 2) записать ход игрока
       addPlayerMove({
         letter: selectedTail.letter,
         player: turn as GamePlayer,
         position: `${indexRow}-${indexCell}`,
       });
 
+      // 3) сбросить состояние стора выбранной ячейки
       setSelectedCell(null);
+
+      // 4) сбросить состояние стора выбранной фишки
       setSelectedTail(null);
+
+      // 5) установить фишку в стор доски
       setCell({ indexRow, indexCell, letter: selectedTail.letter });
     }
   };

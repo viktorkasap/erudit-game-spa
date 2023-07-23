@@ -2,8 +2,6 @@
 
 import { createApi, createStore } from 'effector';
 
-import { log } from 'shared/lib';
-
 export enum Player {
   Idle = 'idle',
   Computer = 'computer',
