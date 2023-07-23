@@ -8,6 +8,7 @@ import { $game } from 'entities/game';
 import { $players, removePlayerTail, addPlayerMove, addPlayerTail, removePlayerMove } from 'entities/players';
 import { $selectedRackTail, setSelectedTail } from 'entities/tail';
 
+import { log } from 'shared/lib';
 import { letters } from 'shared/lib/game';
 import { GamePlayer } from 'shared/types';
 
@@ -31,6 +32,7 @@ export const Cell = ({ children, indexCell, indexRow, isEmpty }: CellProps) => {
     }
 
     if (!isEmpty && currentPlayer.moves.has(`${indexRow}-${indexCell}`)) {
+      log('removing tail');
       setEmptyCell({ indexRow, indexCell });
 
       removePlayerMove({ player: turn as GamePlayer, position: `${indexRow}-${indexCell}` });
