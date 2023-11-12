@@ -188,15 +188,22 @@ const checkDoubleWords = (words: WordWithCoordinates[], historyWords: HistoryWor
   return doubleWords;
 };
 
-export const checkMove = ({
-  board,
-  historyWords,
-  playerMoves,
-}: {
+interface CheckMove {
   board: Board;
   historyWords: HistoryWords;
   playerMoves: Map<string, string>;
-}) => {
+}
+
+// FIXME
+//  - (баг) некорректно работает проверка,
+//    если есть выставленное слово и где-то на поле
+//    в любом месте стоит буква или другое слово
+//    которые не пересекаются с установленными буквами и словами
+//    то не будет ошибки
+
+export const checkMove = ({ board, historyWords, playerMoves }: CheckMove) => {
+  const error = [];
+
   const playerMovesArray = Array.from(playerMoves.keys()).map((key) => key.split('-').map(Number));
 
   const words = getWords(board, playerMovesArray);
@@ -212,18 +219,18 @@ export const checkMove = ({
   log('[moves]', JSON.stringify(playerMovesArray));
 
   if (!isIntersection) {
-    return { error: 'Нет пересечений с другими словами' };
+    error.push('Нет пересечений с другими словами');
   }
 
   if (validDictionaryWords.length) {
-    return { error: `Слов '${validDictionaryWords.join(', ')}' нет слова в словаре` };
+    error.push(`'${validDictionaryWords.join(', ')}' нет слова в словаре`);
   }
 
   if (doubleWords.length) {
-    return { error: `Слово(а) '${doubleWords.map((w) => w.word).join(', ')}' уже были использованы` };
+    error.push(`Слово(а) '${doubleWords.map((w) => w.word).join(', ')}' уже есть на доске`);
   }
 
   // TODO добавить возврат ошибок или данных ходов и слов
 
-  return {};
+  return { error, words: words.map((word) => word.word) };
 };

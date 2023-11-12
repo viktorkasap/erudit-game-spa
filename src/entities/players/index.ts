@@ -9,7 +9,7 @@ import { GamePlayer } from 'shared/types';
 
 enableMapSet(); // включает плагин Mep.set в immer
 
-interface PlayersProps {
+export interface PlayersProps {
   score: number;
   possibleScore: number;
   moves: Map<string, string>;

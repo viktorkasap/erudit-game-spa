@@ -3,8 +3,12 @@ import { useStore } from 'effector-react';
 
 import { Box, Text, createStyles, Group } from '@mantine/core';
 
+import { $board } from 'entities/board';
 import { $game } from 'entities/game';
 import { $players } from 'entities/players';
+
+import { checkMove, log } from 'shared/lib';
+import { GamePlayer } from 'shared/types';
 
 export const Score = () => {
   const { classes, cx } = useStyles();
@@ -12,13 +16,9 @@ export const Score = () => {
   const players = useStore($players);
   const { turn } = useStore($game);
 
-  // const board = useStore($board);
-  // const playerMoves = useStore($playerMoves);
-  // const history = useStore($history);
-  // const historyWords = Object.values(history).flat();
-  //
-  // const validMove = checkMove({ board, historyWords, playerMoves });
-  // log('VALIDMOVE', validMove);
+  const validMoves = useValidMoves();
+
+  log('valid-moves', validMoves);
 
   return (
     <Box className={classes.wrapper}>
@@ -46,6 +46,19 @@ export const Score = () => {
       })}
     </Box>
   );
+};
+
+const useValidMoves = () => {
+  const { turn } = useStore($game);
+  const players = useStore($players);
+  const board = useStore($board);
+
+  const player = players[turn as GamePlayer];
+  const history = Object.values(players)
+    .map((player) => player.history)
+    .flat();
+
+  return checkMove({ board: board.board, historyWords: [board.startWord, ...history], playerMoves: player.moves });
 };
 
 const useStyles = createStyles((theme) => {
